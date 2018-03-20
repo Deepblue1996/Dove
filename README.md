@@ -8,36 +8,28 @@ One:
 Create or open your Application Class, 
 In onCreate ():
 
-<code>
-
-Dove.birth(Nest.build()
+<pre><code>Dove.birth(Nest.build()
 		.setContext(Core.getInstance().getApplicationContext())
                 .setUrl(ComDef.COM_DEF)
                 .setInterfaceClass(JobTask.class));
-
-</code>
+</code></pre>
 
 Dove.birh(?), It will give you the interface;
 
 example:
 
-<code>
-
-JobTask jobTask = (JobTask) Dove.birth(
+<pre><code>JobTask jobTask = (JobTask) Dove.birth(
                 	Nest.build()
                         	.setContext(Core.getInstance().getApplicationContext())
                         	.setUrl(ComDef.COM_DEF)
                         	.setInterfaceClass(JobTask.class));
-			
-</code>
+</code></pre>
 
 Two:
 
 Where you need to use the network:
 
-<code>
-	
-Dove.fly( jobTask.? (Your Interface Service)
+<pre><code>Dove.fly( jobTask.? (Your Interface Service)
 	, new Dover<?>() {
                     @Override
                     public void call(@NonNull Disposable d) {
@@ -59,8 +51,7 @@ Dove.fly( jobTask.? (Your Interface Service)
                         // Already delivered
                     }
                 });
-
-</code>
+</code></pre>
 
 ## Basic deployment
 
@@ -88,9 +79,7 @@ Step 2. Add the dependency
 	
 ## LICENSE
 
-<p><code>
-
-Copyright 2016 Deepblue
+<pre><code>Copyright 2016 Deepblue
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -103,5 +92,4 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
-</code></p>
+</code></pre>
