@@ -1,6 +1,6 @@
 ![Image text](https://raw.githubusercontent.com/Deepblue1996/Dove/master/%E9%B8%BD%E5%AD%90.png)
 
-Dove is a convenient network development tool based on retrofit2 and RxJava2 development
+Dove is a convenient network development tool based on retrofit2 and RxJava2 development.
 
 ## How do I use Dove
 
