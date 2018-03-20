@@ -1,6 +1,68 @@
 ![Image text](https://raw.githubusercontent.com/Deepblue1996/Dove/master/%E9%B8%BD%E5%AD%90.png)
 
-## How to
+Dove is a convenient network development tool based on retrofit2 development
+
+## How do I use Dove
+
+One:
+Create or open your Application Class, 
+In onCreate ():
+
+<code>
+
+Dove.birth(Nest.build()
+		.setContext(Core.getInstance().getApplicationContext())
+                .setUrl(ComDef.COM_DEF)
+                .setInterfaceClass(JobTask.class));
+
+</code>
+
+Dove.birh(?), It will give you the interface;
+
+example:
+
+<code>
+
+JobTask jobTask = (JobTask) Dove.birth(
+                	Nest.build()
+                        	.setContext(Core.getInstance().getApplicationContext())
+                        	.setUrl(ComDef.COM_DEF)
+                        	.setInterfaceClass(JobTask.class));
+			
+</code>
+
+Two:
+
+Where you need to use the network:
+
+<code>
+	
+Dove.fly( jobTask.? (Your Interface Service)
+	, new Dover<?>() {
+                    @Override
+                    public void call(@NonNull Disposable d) {
+                        // In the beginning, there will be a notice.
+                    }
+
+                    @Override
+                    public void don(Disposable d, @NonNull ? thing) {
+                        // The next step to receive data
+                    }
+
+                    @Override
+                    public void die(Disposable d, @NonNull Throwable throwable) {
+                        // Abnormality
+                    }
+
+                    @Override
+                    public void end(Disposable d) {
+                        // Already delivered
+                    }
+                });
+
+</code>
+
+## Basic deployment
 
 To get a Git project into your build:
 
