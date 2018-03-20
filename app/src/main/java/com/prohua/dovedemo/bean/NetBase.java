@@ -21,5 +21,5 @@ public class NetBase<T> implements Serializable {
     /**
      * 返回的结构数据
      */
-    public  T data;
+    public T data;
 }

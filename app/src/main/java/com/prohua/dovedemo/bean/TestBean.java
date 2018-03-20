@@ -4,10 +4,11 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * json类
  * Created by Deep on 2018/1/16 0016.
  */
 
-public class IndexAllDataBean implements Serializable {
+public class TestBean implements Serializable {
 
     private List<GoodsListBean> goods_list;
     private List<QueryListBean> query_list;

@@ -5,7 +5,7 @@ import android.app.Application;
 import com.prohua.dove.Dove;
 import com.prohua.dove.Nest;
 import com.prohua.dovedemo.net.ComDef;
-import com.prohua.dovedemo.net.JobService;
+import com.prohua.dovedemo.net.JobTask;
 
 /**
  * 全局
@@ -17,10 +17,10 @@ public class Core extends Application {
     private static Core instance;
 
     // 任务
-    private static JobService box;
+    private static JobTask jobTask;
 
-    public static JobService box() {
-        return box;
+    public static JobTask jobTask() {
+        return jobTask;
     }
 
     public static Core getInstance() {
@@ -33,12 +33,12 @@ public class Core extends Application {
 
         instance = this;
 
-        // 做一个鸟巢，用来养鸽子，鸽子出生了，它是用来给你干指定的事
-        box = (JobService) Dove.birth(
+        // 先做一个鸟巢，用来养鸽子，让鸽子给你送信
+        jobTask = (JobTask) Dove.birth(
                 Nest.build()
                         .setContext(Core.getInstance().getApplicationContext())
                         .setUrl(ComDef.COM_DEF)
-                        .setInterfaceClass(JobService.class));
+                        .setInterfaceClass(JobTask.class));
     }
 
 }

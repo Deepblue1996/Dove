@@ -122,7 +122,7 @@ public class Dove {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String message) {
-                Log.d("Dove",message);
+                Log.d("Dove", message);
             }
         });
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -132,6 +132,13 @@ public class Dove {
     private static final int TIMEOUT_CONNECT = 5; //5秒
     private static final int TIMEOUT_DISCONNECT = 60 * 60 * 24 * 7; //7天
 
+    /**
+     * 默认提供的封装方法
+     *
+     * @param observable
+     * @param observer
+     * @param <T>
+     */
     public static <T> void fly(Observable<T> observable, Dover<T> observer) {
         observable.subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())

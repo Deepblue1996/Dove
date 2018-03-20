@@ -6,7 +6,10 @@ package com.prohua.dove.exception;
  */
 
 public class ApiException extends Exception {
+
+    // 异常代码
     public int code;
+    // 提示信息
     public String message;
 
     public ApiException(Throwable throwable, int code) {
