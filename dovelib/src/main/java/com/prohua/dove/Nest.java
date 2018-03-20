@@ -1,7 +1,5 @@
 package com.prohua.dove;
 
-import android.content.Context;
-
 /**
  * 鸟巢
  * Created by Deep on 2018/3/19 0019.
@@ -9,14 +7,12 @@ import android.content.Context;
 
 public class Nest {
 
-    private String url;
-    private Context context;
+    private String baseUrl;
     private Class interfaceClass;
 
     private static Nest nest;
 
     private Nest() {
-
     }
 
     /**
@@ -33,17 +29,12 @@ public class Nest {
         return nest;
     }
 
-    public Nest setUrl(String url) {
-        this.url = url;
+    public Nest setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
         return nest;
     }
 
-    public Nest setContext(Context context) {
-        this.context = context;
-        return nest;
-    }
-
-    public Class getInterfaceClass() {
+    Class getInterfaceClass() {
         return interfaceClass;
     }
 
@@ -52,11 +43,8 @@ public class Nest {
         return nest;
     }
 
-    public String getUrl() {
-        return url;
+    String getBaseUrl() {
+        return baseUrl;
     }
 
-    public Context getContext() {
-        return context;
-    }
 }

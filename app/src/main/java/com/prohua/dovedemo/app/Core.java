@@ -23,7 +23,7 @@ public class Core extends Application {
         return jobTask;
     }
 
-    public static Core getInstance() {
+    public static Core instance() {
         return instance;
     }
 
@@ -34,11 +34,8 @@ public class Core extends Application {
         instance = this;
 
         // 先做一个鸟巢，用来养鸽子，让鸽子给你送信
-        jobTask = (JobTask) Dove.birth(
-                Nest.build()
-                        .setContext(Core.getInstance().getApplicationContext())
-                        .setUrl(ComDef.COM_DEF)
-                        .setInterfaceClass(JobTask.class));
+        jobTask = Dove.birth(Core.instance().getApplicationContext(),
+                Nest.build().setBaseUrl(ComDef.BASE_COM_URL).setInterfaceClass(JobTask.class));
     }
 
 }

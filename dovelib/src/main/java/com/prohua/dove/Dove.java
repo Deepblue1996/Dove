@@ -38,15 +38,16 @@ public class Dove {
     /**
      * 出生 全局初始化
      */
-    public static Object birth(Nest nest) {
+    @SuppressWarnings("unchecked") // Single-interface proxy creation guarded by parameter safety.
+    public static <T> T birth(Context context, Nest nest) {
         if (null == mInstance) {
             synchronized (Dove.class) {
                 if (null == mInstance) {
-                    mInstance = new Dove(nest.getContext(), nest.getUrl(), nest.getInterfaceClass());
+                    mInstance = new Dove(context, nest.getBaseUrl(), nest.getInterfaceClass());
                 }
             }
         }
-        return doveMission;
+        return (T) doveMission;
     }
 
     /**
@@ -135,9 +136,9 @@ public class Dove {
     /**
      * 默认提供的封装方法
      *
-     * @param observable
-     * @param observer
-     * @param <T>
+     * @param observable 接口方法
+     * @param observer   监听方法
+     * @param <T>        参数
      */
     public static <T> void fly(Observable<T> observable, Dover<T> observer) {
         observable.subscribeOn(Schedulers.newThread())
