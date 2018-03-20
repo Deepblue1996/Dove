@@ -1,5 +1,3 @@
-# Dove
-
 ![Image text](https://raw.githubusercontent.com/Deepblue1996/Dove/master/%E9%B8%BD%E5%AD%90.png)
 
 How to
