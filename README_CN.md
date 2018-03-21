@@ -1,14 +1,14 @@
 ![Image text](https://raw.githubusercontent.com/Deepblue1996/Dove/master/%E9%B8%BD%E5%AD%90.png)
 
-Dove is a convenient network layer framework based on Retrofit2 and RxJava2 for two development and encapsulation.
+Dove 是一个基于Retrofit2和RxJava2，进行二次开发封装的便捷网络层框架。
 
-## How do I use Dove
+## 我们怎么使用 Dove
 
-One:
+步骤一:
 
-Create or open your Application Class, 
+创建或打开你的 Application 类文件, 
 
-In onCreate ():
+在 onCreate () 里面添加:
 
 <pre><code>Dove.birth(Nest.build()
 		.setContext(Core.getInstance().getApplicationContext())
@@ -16,57 +16,57 @@ In onCreate ():
                 .setInterfaceClass(JobTask.class));
 </code></pre>
 
-Why is it called the bird's nest, because it is a basic project.
+为什么要建造一个Nest, 在这里, Nest是一个配置类.
 
-Use it build().setContext().setBaseUrl().setInterfaceClass() for
+使用它 build().setContext().setBaseUrl().setInterfaceClass() 到
 
-Dove.birh(?), It will give you the interface;
+Dove.birh(?), 它将返回你设置的接口对象;
 
-example:
+示例:
 
 <pre><code>JobTask jobTask = Dove.birth(Core.instance().getApplicationContext(),
                 Nest.build().setBaseUrl(ComDef.BASE_COM_URL).setInterfaceClass(JobTask.class));
 </code></pre>
 
-Two:
+步骤二:
 
-Where you need to use the network:
+在你想获取网络数据的地方，添加一下代码:
 
 <pre><code>Dove.fly( jobTask.? (Your Interface Service)
 	, new Dover<?>() {
                     @Override
                     public void call(@NonNull Disposable d) {
-                        // In the beginning, there will be a notice.
+                        // 开始通知.
                     }
 
                     @Override
                     public void don(Disposable d, @NonNull ? thing) {
-                        // The next step to receive data
+                        // 接收到数据.
                     }
 
                     @Override
                     public void die(Disposable d, @NonNull Throwable throwable) {
-                        // Abnormality
+                        // 出错或者中断.
                     }
 
                     @Override
                     public void end(Disposable d) {
-                        // Already delivered
+                        // 完成了
                     }
                 });
 </code></pre>
 
-## Basic deployment
+## 基础配置
 
-To get a Git project into your build:
+在你的构建中得到一个Git项目:
 
-Step 1. Add the JitPack repository to your build file
+步骤 1. 添加 JitPack repository 到你的编译文件
 
 gradle
 maven
 sbt
 leiningen
-Add it in your root build.gradle at the end of repositories:
+添加它到你的根目录 build.gradle 文件, repositories 语法最后的地方:
 
 	allprojects {
 		repositories {
@@ -74,14 +74,14 @@ Add it in your root build.gradle at the end of repositories:
 			maven { url 'https://jitpack.io' }
 		}
 	}Copy
-Step 2. Add the dependency
+步骤 2. 添加 dependency
 
 	dependencies {
 	        compile 'com.github.Deepblue1996:Dove:1.1'
 	}
-Step 3. Gradle
-
-## LICENSE
+步骤 3. 构建
+	
+## 协议
 
 <pre><code>Copyright 2018 Deepblue
 
