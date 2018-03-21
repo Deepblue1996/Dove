@@ -2,6 +2,8 @@
 
 Dove 是一个基于Retrofit2和RxJava2，进行二次开发封装的便捷网络层框架。
 
+[[English Document]](https://github.com/Deepblue1996/Dove/blob/master/README_CN.md)
+
 ## 我们怎么使用 Dove
 
 步骤一:
