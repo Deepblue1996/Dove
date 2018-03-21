@@ -24,19 +24,19 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * 鸽子
+ * 鸽子 Dove
  * Created by Deep on 2018/3/14 0014.
  */
 
 public class Dove {
 
-    // 鸽子 对象单例
+    // Dove object single case
     private static Dove mInstance;
-    // 使命 服务接口单例
+    // Mission service interface singleton
     private static Object doveMission;
 
     /**
-     * 出生 全局初始化
+     * Birth a nest Global singleton static.
      */
     @SuppressWarnings("unchecked") // Single-interface proxy creation guarded by parameter safety.
     public static <T> T birth(Context context, Nest nest) {
@@ -51,26 +51,26 @@ public class Dove {
     }
 
     /**
-     * 网络层初始化
+     * Dove structure
      */
     private Dove(final Context context, final String baseUrl, Class doveClass) {
 
-        //缓存容量
+        // 缓存容量
         long SIZE_OF_CACHE = 10 * 1024 * 1024; // 10 MiB
-        //缓存路径
+        // 缓存路径
         String cacheFile = context.getCacheDir() + "/http";
         Cache cache = new Cache(new File(cacheFile), SIZE_OF_CACHE);
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(5, TimeUnit.SECONDS)
                 .addInterceptor(getLoggingInterceptor())
-                //有网络时的拦截器
+                // 有网络时的拦截器
                 .addNetworkInterceptor(new Interceptor() {
                     @Override
                     public okhttp3.Response intercept(@NonNull Chain chain) throws IOException {
                         okhttp3.Response originalResponse = chain.proceed(chain.request());
                         String cacheControl = originalResponse.header("Cache-Control");
-                        //如果cacheControl为空，就让他TIMEOUT_CONNECT秒的缓存，本例是5秒，方便观察
+                        // 如果cacheControl为空，就让他TIMEOUT_CONNECT秒的缓存，本例是5秒，方便观察
                         if (cacheControl == null) {
                             originalResponse = originalResponse.newBuilder()
                                     .header("Cache-Control", "public, max-age=" + TIMEOUT_CONNECT)
@@ -81,12 +81,12 @@ public class Dove {
                         }
                     }
                 })
-                //没网络时的拦截器
+                // 没网络时的拦截器
                 .addInterceptor(new Interceptor() {
                     @Override
                     public okhttp3.Response intercept(@NonNull Chain chain) throws IOException {
                         Request request = chain.request();
-                        //离线的时候为7天的缓存。
+                        // 离线的时候为7天的缓存。
                         if (!NetUtils.isNetworkAvalible(context)
                                 && !NetUtils.isWifiConnected(context)) {
                             request = request.newBuilder()
@@ -115,9 +115,9 @@ public class Dove {
     }
 
     /**
-     * 打印拦截器
+     * Print interceptor
      *
-     * @return 拦截器
+     * @return interceptor
      */
     private Interceptor getLoggingInterceptor() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
@@ -130,15 +130,15 @@ public class Dove {
         return logging;
     }
 
-    private static final int TIMEOUT_CONNECT = 5; //5秒
+    private static final int TIMEOUT_CONNECT = 5;                   //5秒
     private static final int TIMEOUT_DISCONNECT = 60 * 60 * 24 * 7; //7天
 
     /**
-     * 默认提供的封装方法
+     * Encapsulation method provided by default
      *
-     * @param observable 接口方法
-     * @param observer   监听方法
-     * @param <T>        参数
+     * @param observable Interface method
+     * @param observer   Listen method
+     * @param <T>        void
      */
     public static <T> void fly(Observable<T> observable, Dover<T> observer) {
         observable.subscribeOn(Schedulers.newThread())

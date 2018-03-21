@@ -5,7 +5,7 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 
 /**
- * 收信者 进一步封装
+ * 收信者 Receiver further encapsulation
  * Created by Deep on 2018/3/14 0014.
  */
 

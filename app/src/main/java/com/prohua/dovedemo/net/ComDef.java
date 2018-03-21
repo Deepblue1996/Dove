@@ -1,7 +1,7 @@
 package com.prohua.dovedemo.net;
 
 /**
- * 地址
+ * 地址 url - Address
  * Created by Deep on 2018/3/14 0014.
  */
 

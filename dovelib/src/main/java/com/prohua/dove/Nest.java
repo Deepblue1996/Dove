@@ -1,22 +1,25 @@
 package com.prohua.dove;
 
 /**
- * 鸟巢
+ * 鸟巢 Nest
  * Created by Deep on 2018/3/19 0019.
  */
 
 public class Nest {
 
+    // BaseUrl Application Server Url.
     private String baseUrl;
+    // InterfaceClass Your own custom interface.
     private Class interfaceClass;
 
+    // Only One.
     private static Nest nest;
 
     private Nest() {
     }
 
     /**
-     * 出生 全局初始化
+     * Build a nest Global singleton static.
      */
     public static Nest build() {
         if (null == nest) {
