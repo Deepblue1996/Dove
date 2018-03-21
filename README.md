@@ -2,7 +2,7 @@
 
 Dove is a convenient network layer framework based on Retrofit2 and RxJava2 for two development and encapsulation.
 
-[![中文文档]](https://raw.githubusercontent.com/Deepblue1996/Dove/README_CN.md)
+[[中文文档]](https://github.com/Deepblue1996/Dove/README_CN.md)
 
 ## How do I use Dove
 
