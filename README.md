@@ -24,11 +24,8 @@ Dove.birh(?), It will give you the interface;
 
 example:
 
-<pre><code>JobTask jobTask = (JobTask) Dove.birth(
-                	Nest.build()
-                        	.setContext(Core.getInstance().getApplicationContext())
-                        	.setUrl(ComDef.COM_DEF)
-                        	.setInterfaceClass(JobTask.class));
+<pre><code>JobTask jobTask = Dove.birth(Core.instance().getApplicationContext(),
+                Nest.build().setBaseUrl(ComDef.BASE_COM_URL).setInterfaceClass(JobTask.class));
 </code></pre>
 
 Two:
@@ -80,7 +77,7 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
-	        compile 'com.github.Deepblue1996:Dove:1.0'
+	        compile 'com.github.Deepblue1996:Dove:1.1'
 	}
 	
 ## LICENSE
