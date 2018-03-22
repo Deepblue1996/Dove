@@ -1,14 +1,18 @@
 package com.prohua.dove;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.util.Log;
 
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.FormatStrategy;
+import com.orhanobut.logger.Logger;
+import com.orhanobut.logger.PrettyFormatStrategy;
+import com.prohua.dove.base.Nest;
+import com.prohua.dove.interceptor.DoveLoggingInterceptor;
+import com.prohua.dove.interceptor.DoveNetworkInterceptor;
+import com.prohua.dove.interceptor.DoveNotNetworkInterceptor;
 import com.prohua.dove.utils.HttpResponseFunc;
-import com.prohua.dove.utils.NetUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -17,8 +21,6 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -43,7 +45,7 @@ public class Dove {
         if (null == mInstance) {
             synchronized (Dove.class) {
                 if (null == mInstance) {
-                    mInstance = new Dove(context, nest.getBaseUrl(), nest.getInterfaceClass());
+                    mInstance = new Dove(context, nest);
                 }
             }
         }
@@ -53,57 +55,27 @@ public class Dove {
     /**
      * Dove structure
      */
-    private Dove(final Context context, final String baseUrl, Class doveClass) {
+    private Dove(final Context context, final Nest nest) {
 
-        // 缓存容量
-        long SIZE_OF_CACHE = 10 * 1024 * 1024; // 10 MiB
+        FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
+                .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true
+                .methodCount(0)         // (Optional) How many method line to show. Default 2
+                .methodOffset(7)        // (Optional) Hides internal method calls up to offset. Default 5
+                .tag("Dove")            // (Optional) Global tag for every log. Default PRETTY_LOGGER
+                .build();
+
+        Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
+
         // 缓存路径
         String cacheFile = context.getCacheDir() + "/http";
-        Cache cache = new Cache(new File(cacheFile), SIZE_OF_CACHE);
 
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(5, TimeUnit.SECONDS)
-                .addInterceptor(getLoggingInterceptor())
-                // 有网络时的拦截器
-                .addNetworkInterceptor(new Interceptor() {
-                    @Override
-                    public okhttp3.Response intercept(@NonNull Chain chain) throws IOException {
-                        okhttp3.Response originalResponse = chain.proceed(chain.request());
-                        String cacheControl = originalResponse.header("Cache-Control");
-                        // 如果cacheControl为空，就让他TIMEOUT_CONNECT秒的缓存，本例是5秒，方便观察
-                        if (cacheControl == null) {
-                            originalResponse = originalResponse.newBuilder()
-                                    .header("Cache-Control", "public, max-age=" + TIMEOUT_CONNECT)
-                                    .build();
-                            return originalResponse;
-                        } else {
-                            return originalResponse;
-                        }
-                    }
-                })
-                // 没网络时的拦截器
-                .addInterceptor(new Interceptor() {
-                    @Override
-                    public okhttp3.Response intercept(@NonNull Chain chain) throws IOException {
-                        Request request = chain.request();
-                        // 离线的时候为7天的缓存。
-                        if (!NetUtils.isNetworkAvalible(context)
-                                && !NetUtils.isWifiConnected(context)) {
-                            request = request.newBuilder()
-                                    .header("Cache-Control", "public, only-if-cached, max-stale=" + TIMEOUT_DISCONNECT)
-                                    .build();
-                        }
-                        return chain.proceed(request);
-                    }
-                })
-                .cache(cache)
-                .build();
+        Cache cache = new Cache(new File(cacheFile), nest.getCacheSize());
 
         Retrofit retrofit = new Retrofit.Builder()
                 // 设置网络请求的Url地址
-                .baseUrl(baseUrl)
+                .baseUrl(nest.getBaseUrl())
                 // 设置OkHttp
-                .client(okHttpClient)
+                .client(getDoveHttpClient(context, cache, nest))
                 // 设置数据解析器
                 .addConverterFactory(GsonConverterFactory.create())
                 // 支持RxJava平台
@@ -111,7 +83,25 @@ public class Dove {
                 // 建造
                 .build();
 
-        doveMission = retrofit.create(doveClass);
+        doveMission = retrofit.create(nest.getInterfaceClass());
+    }
+
+    /**
+     * OkHttpClient
+     *
+     * @param context 上下文
+     * @param cache   缓存
+     * @return OkHttp
+     */
+    private OkHttpClient getDoveHttpClient(final Context context, final Cache cache, final Nest nest) {
+
+        return new OkHttpClient.Builder()
+                .connectTimeout(nest.getConnectTime(), TimeUnit.SECONDS)
+                .addInterceptor(getLoggingInterceptor())
+                .addNetworkInterceptor(new DoveNetworkInterceptor(nest.getConnectTime()))
+                .addInterceptor(new DoveNotNetworkInterceptor(context, nest.getDisconnectTime()))
+                .cache(cache)
+                .build();
     }
 
     /**
@@ -120,18 +110,8 @@ public class Dove {
      * @return interceptor
      */
     private Interceptor getLoggingInterceptor() {
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-            @Override
-            public void log(String message) {
-                Log.d("Dove", message);
-            }
-        });
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        return logging;
+        return new DoveLoggingInterceptor();
     }
-
-    private static final int TIMEOUT_CONNECT = 5;                   //5秒
-    private static final int TIMEOUT_DISCONNECT = 60 * 60 * 24 * 7; //7天
 
     /**
      * Encapsulation method provided by default
