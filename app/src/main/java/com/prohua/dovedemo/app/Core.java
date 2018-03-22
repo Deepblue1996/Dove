@@ -3,7 +3,7 @@ package com.prohua.dovedemo.app;
 import android.app.Application;
 
 import com.prohua.dove.Dove;
-import com.prohua.dove.Nest;
+import com.prohua.dove.base.Nest;
 import com.prohua.dovedemo.net.ComDef;
 import com.prohua.dovedemo.net.JobTask;
 
