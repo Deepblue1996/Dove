@@ -2,6 +2,8 @@ package com.prohua.dove.base;
 
 import com.prohua.dove.Dove;
 
+import java.util.HashMap;
+
 /**
  * 鸟巢 Nest
  * Created by Deep on 2018/3/19 0019.
@@ -13,6 +15,9 @@ public class Nest {
     private String baseUrl;
     // InterfaceClass Your own custom interface.
     private Class interfaceClass;
+    // Global parameters
+    private HashMap<String, String> params;
+
     // cacheSize
     private long cacheSize = DefaultConfig.SIZE_OF_CACHE;
     private long disconnectTime = DefaultConfig.TIMEOUT_DISCONNECT;
@@ -22,6 +27,7 @@ public class Nest {
     private static Nest nest;
 
     private Nest() {
+        params = new HashMap<>();
     }
 
     /**
@@ -85,5 +91,19 @@ public class Nest {
     public Nest setDisconnectTime(long disconnectTime) {
         this.disconnectTime = disconnectTime;
         return nest;
+    }
+
+    public Nest addGlobalParam(String key, String value) {
+        params.put(key, value);
+        return nest;
+    }
+
+    public Nest addGlobalParams(HashMap<String, String> maps) {
+        params.putAll(maps);
+        return nest;
+    }
+
+    public HashMap<String, String> getGlobalParams() {
+        return params;
     }
 }
