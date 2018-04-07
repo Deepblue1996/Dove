@@ -12,15 +12,13 @@ Dove 是一个基于Retrofit2和RxJava2，进行二次开发封装的便捷网�
 
 在 onCreate () 里面添加:
 
-<pre><code>Dove.birth(Nest.build()
-		.setContext(Core.getInstance().getApplicationContext())
-                .setUrl(ComDef.COM_DEF)
-                .setInterfaceClass(JobTask.class));
+<pre><code>Dove.birth(Core.instance().getApplicationContext(),
+                Nest.build().setBaseUrl(ComDef.BASE_COM_URL).setInterfaceClass(JobTask.class));
 </code></pre>
 
 为什么要建造一个Nest, 在这里, Nest是一个配置类.
 
-使用它 build().setContext().setBaseUrl().setInterfaceClass() 到
+使用它 build().setBaseUrl().setInterfaceClass() 到
 
 Dove.birh(?), 它将返回你设置的接口对象;
 
@@ -79,7 +77,7 @@ leiningen
 步骤 2. 添加 dependency
 
 	dependencies {
-	        compile 'com.github.Deepblue1996:Dove:1.1'
+	        compile 'com.github.Deepblue1996:Dove:1.2'
 	}
 步骤 3. 构建
 	

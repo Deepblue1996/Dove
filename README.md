@@ -12,15 +12,13 @@ Create or open your Application Class,
 
 In onCreate ():
 
-<pre><code>Dove.birth(Nest.build()
-		.setContext(Core.getInstance().getApplicationContext())
-                .setUrl(ComDef.COM_DEF)
-                .setInterfaceClass(JobTask.class));
+<pre><code>Dove.birth(Core.instance().getApplicationContext(),
+                Nest.build().setBaseUrl(ComDef.BASE_COM_URL).setInterfaceClass(JobTask.class));
 </code></pre>
 
 Why is it called the bird's nest, because it is a basic project.
 
-Use it build().setContext().setBaseUrl().setInterfaceClass() for
+Use it build().setBaseUrl().setInterfaceClass() for
 
 Dove.birh(?), It will give you the interface;
 
@@ -79,7 +77,7 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
-	        compile 'com.github.Deepblue1996:Dove:1.1'
+	        compile 'com.github.Deepblue1996:Dove:1.2'
 	}
 Step 3. Gradle
 
