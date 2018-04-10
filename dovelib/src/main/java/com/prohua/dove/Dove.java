@@ -114,10 +114,10 @@ public class Dove {
 
         return new OkHttpClient.Builder()
                 .connectTimeout(nest.getConnectTime(), TimeUnit.SECONDS)
-                .addInterceptor(getLoggingInterceptor())
+                .addInterceptor(addParamsInterceptor(nest))
                 .addNetworkInterceptor(new DoveNetworkInterceptor(nest.getConnectTime()))
                 .addInterceptor(new DoveNotNetworkInterceptor(context, nest.getDisconnectTime()))
-                .addInterceptor(addParamsInterceptor(nest))
+                .addInterceptor(getLoggingInterceptor())
                 .cache(cache)
                 .build();
     }

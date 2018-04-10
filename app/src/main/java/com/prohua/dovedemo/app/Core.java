@@ -35,7 +35,10 @@ public class Core extends Application {
 
         // First make a nest, used to raise dove, let dove send you a letter.
         jobTask = Dove.birth(Core.instance().getApplicationContext(),
-                Nest.build().setBaseUrl(ComDef.BASE_COM_URL).setInterfaceClass(JobTask.class));
+                Nest.build()
+                        .setBaseUrl(ComDef.BASE_COM_URL)
+                        .setInterfaceClass(JobTask.class)
+                        .addGlobalParam("test", "test"));
     }
 
 }

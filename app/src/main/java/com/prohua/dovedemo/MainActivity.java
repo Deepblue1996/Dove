@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         testData = findViewById(R.id.testData);
 
         // 放信到鸽子里，呼唤它飞到收信者那里
-        Dove.fly(Core.jobTask().getTestData(),
+        Dove.fly(Core.jobTask().getTestDataPost(null),
                 new Dover<NetBase<TestBean>>() {
                     @Override
                     public void call(@NonNull Disposable d) {
