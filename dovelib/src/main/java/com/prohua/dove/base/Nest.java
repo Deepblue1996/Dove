@@ -106,4 +106,8 @@ public class Nest {
     public HashMap<String, String> getGlobalParams() {
         return params;
     }
+
+    public void clearParams() {
+        params.clear();
+    }
 }

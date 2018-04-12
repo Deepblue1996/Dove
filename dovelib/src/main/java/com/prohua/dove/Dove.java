@@ -54,6 +54,8 @@ public class Dove {
     // Mission service interface singleton
     private static Object doveMission;
 
+    private Nest nest;
+
     /**
      * Birth a nest Global singleton static.
      */
@@ -74,6 +76,8 @@ public class Dove {
      */
     private Dove(final Context context, final Nest nest) {
 
+        this.nest = nest;
+
         FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
                 .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true
                 .methodCount(0)         // (Optional) How many method line to show. Default 2
@@ -93,7 +97,7 @@ public class Dove {
                 .baseUrl(nest.getBaseUrl())
                 // 设置OkHttp
                 .client(getDoveHttpClient(context, cache, nest))
-                // 设置数据解析器
+                // 设置Json数据解析器
                 .addConverterFactory(GsonConverterFactory.create())
                 // 支持RxJava平台
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -236,6 +240,28 @@ public class Dove {
                 return chain.proceed(newRequest);
             }
         };
+    }
+
+    /**
+     * clearParams
+     */
+    public void clearParams() {
+        nest.clearParams();
+    }
+
+    /**
+     * addGlobalParam
+     */
+    public void addGlobalParam(String key, String value) {
+        nest.addGlobalParam(key, value);
+    }
+
+    /**
+     * addGlobalParams
+     * @param maps HashMap
+     */
+    public void addGlobalParams(HashMap<String, String> maps) {
+        nest.addGlobalParams(maps);
     }
 
     /**
