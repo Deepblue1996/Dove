@@ -54,7 +54,7 @@ public class Dove {
     // Mission service interface singleton
     private static Object doveMission;
 
-    private Nest nest;
+    private static Nest nest;
 
     /**
      * Birth a nest Global singleton static.
@@ -76,7 +76,7 @@ public class Dove {
      */
     private Dove(final Context context, final Nest nest) {
 
-        this.nest = nest;
+        Dove.nest = nest;
 
         FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
                 .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true
@@ -245,14 +245,14 @@ public class Dove {
     /**
      * clearParams
      */
-    public void clearParams() {
+    public static void clearParams() {
         nest.clearParams();
     }
 
     /**
      * addGlobalParam
      */
-    public void addGlobalParam(String key, String value) {
+    public static void addGlobalParam(String key, String value) {
         nest.addGlobalParam(key, value);
     }
 
@@ -260,7 +260,7 @@ public class Dove {
      * addGlobalParams
      * @param maps HashMap
      */
-    public void addGlobalParams(HashMap<String, String> maps) {
+    public static void addGlobalParams(HashMap<String, String> maps) {
         nest.addGlobalParams(maps);
     }
 
