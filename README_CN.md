@@ -81,7 +81,7 @@ leiningen
 步骤 2. 添加 dependency
 
 	dependencies {
-	        compile 'com.github.Deepblue1996:Dove:1.3.2'
+	        compile 'com.github.Deepblue1996:Dove:1.3.3'
 	}
 步骤 3. 构建
 	
