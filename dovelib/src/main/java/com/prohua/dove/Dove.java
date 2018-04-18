@@ -16,6 +16,7 @@ import com.prohua.dove.utils.HttpResponseFunc;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +28,7 @@ import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -46,6 +48,7 @@ public class Dove {
     private final static String NET_POST = "POST";
     private final static String NET_GET = "GET";
 
+    private final static String NET_UP_ENCODED = "multipart/form-data";
     private final static String NET_URL_ENCODED = "x-www-form-urlencoded";
     private final static String NET_URL_ENCODED_L = "application/x-www-form-urlencoded;charset=UTF-8";
 
@@ -140,7 +143,7 @@ public class Dove {
      * GET request to add parameters
      *
      * @param oldRequest request
-     * @param maps maps
+     * @param maps       maps
      * @return new request
      */
     private Request addGetParams(Request oldRequest, HashMap<String, String> maps) {
@@ -168,7 +171,7 @@ public class Dove {
      * POST request to add parameters
      *
      * @param request request
-     * @param maps maps
+     * @param maps    maps
      * @return new request
      */
     private Request addPostParams(Request request, HashMap<String, String> maps) {
@@ -258,6 +261,7 @@ public class Dove {
 
     /**
      * addGlobalParams
+     *
      * @param maps HashMap
      */
     public static void addGlobalParams(HashMap<String, String> maps) {
@@ -279,4 +283,79 @@ public class Dove {
                 .onErrorResumeNext(new HttpResponseFunc<T>())
                 .subscribe(observer);
     }
+
+    /**
+     * UpFile MultipartBody.Part
+     * <p>
+     * * for example use to
+     * * @Part MultipartBody.Part name
+     *
+     * @param key  String Key
+     * @param path String Path
+     * @return MultipartBody.Part
+     */
+    public static MultipartBody.Part filePart(String key, String path) {
+        File file = new File(path);
+        return MultipartBody.Part.createFormData(key, file.getName(),
+                RequestBody.create(MediaType.parse(NET_UP_ENCODED), file));
+    }
+
+    /**
+     * UpFiles MultipartBody.Part[]
+     * <p>
+     * * for example use to
+     * * @Part MultipartBody.Part[] names
+     *
+     * @param key  List<String> Key
+     * @param path List<String> Path
+     * @return MultipartBody.Part[]
+     */
+    public static MultipartBody.Part[] filesPart(List<String> key, List<String> path) {
+
+        MultipartBody.Part[] partList = new MultipartBody.Part[key.size()];
+
+        for (int i = 0; i < key.size(); i++) {
+            File file = new File(path.get(i));
+            partList[i] = MultipartBody.Part.createFormData(key.get(i), file.getName(),
+                    RequestBody.create(MediaType.parse(NET_UP_ENCODED), file));
+        }
+
+        return partList;
+    }
+
+    /**
+     * UpFileParam MultipartBody.Part
+     * <p>
+     * * for example use to
+     * * @Part MultipartBody.Part key
+     *
+     * @param key   String key
+     * @param value String value
+     * @return MultipartBody.Part
+     */
+    public static MultipartBody.Part paramPart(String key, String value) {
+        return MultipartBody.Part.createFormData(key, value);
+    }
+
+    /**
+     * UpFileParams MultipartBody.Part[]
+     * <p>
+     * * for example use to
+     * * @Part MultipartBody.Part[] key
+     *
+     * @param key   List<String> key
+     * @param value List<String> value
+     * @return MultipartBody.Part[]
+     */
+    public static MultipartBody.Part[] paramsPart(List<String> key, List<String> value) {
+
+        MultipartBody.Part[] partList = new MultipartBody.Part[key.size()];
+
+        for (int i = 0; i < key.size(); i++) {
+            partList[i] = MultipartBody.Part.createFormData(key.get(i), value.get(i));
+        }
+
+        return partList;
+    }
+
 }
