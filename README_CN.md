@@ -43,11 +43,6 @@ Dove.birh(?), 它将返回你设置的接口对象;
 <pre><code>Dove.fly( jobTask.? (Your Interface Service)
 	, new Dover<?>() {
                     @Override
-                    public void call(@NonNull Disposable d) {
-                        // 开始通知.
-                    }
-
-                    @Override
                     public void don(Disposable d, @NonNull ? thing) {
                         // 接收到数据.
                     }
@@ -55,11 +50,6 @@ Dove.birh(?), 它将返回你设置的接口对象;
                     @Override
                     public void die(Disposable d, @NonNull Throwable throwable) {
                         // 出错或者中断.
-                    }
-
-                    @Override
-                    public void end(Disposable d) {
-                        // 完成了
                     }
                 });
 </code></pre>
@@ -85,7 +75,7 @@ leiningen
 步骤 2. 添加 dependency
 
 	dependencies {
-	        compile 'com.github.Deepblue1996:Dove:1.3.4'
+	        compile 'com.github.Deepblue1996:Dove:1.3.5'
 	}
 步骤 3. 构建
 	
