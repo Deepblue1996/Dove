@@ -29,11 +29,6 @@ public class MainActivity extends AppCompatActivity {
         // 放信到鸽子里，呼唤它飞到收信者那里
         Dove.fly(Core.jobTask().getTestDataPost(null),
                 new Dover<NetBase<TestBean>>() {
-                    @Override
-                    public void call(@NonNull Disposable d) {
-                        // 开始/通知
-                        testData.setText("通知");
-                    }
 
                     @Override
                     public void don(Disposable d, @NonNull NetBase<TestBean> testBeanNetBase) {
@@ -49,11 +44,6 @@ public class MainActivity extends AppCompatActivity {
                         testData.setText(testData.getText() + "\n" + "中断");
                     }
 
-                    @Override
-                    public void end(Disposable d) {
-                        // 结束/完成
-                        testData.setText(testData.getText() + "\n" + "完成");
-                    }
                 });
 
     }
