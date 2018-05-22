@@ -16,7 +16,6 @@ public abstract class Dover<T> implements Observer<T> {
     @Override
     public void onSubscribe(@NonNull Disposable disposable) {
         this.disposable = disposable;
-        call(disposable);
     }
 
     @Override
@@ -31,19 +30,12 @@ public abstract class Dover<T> implements Observer<T> {
 
     @Override
     public void onComplete() {
-        end(disposable);
     }
-
-    /**
-     * 提醒
-     *
-     * @param d Disposable 用于解除订阅
-     */
-    public abstract void call(@NonNull Disposable d);
 
     /**
      * 收到
      *
+     * @param d 订阅
      * @param t 数据
      */
     public abstract void don(Disposable d, @NonNull T t);
@@ -51,13 +43,9 @@ public abstract class Dover<T> implements Observer<T> {
     /**
      * 中途断了
      *
-     * @param e 异常信息
+     * @param d 订阅
+     * @param throwable 异常信息
      */
     public abstract void die(Disposable d, @NonNull Throwable throwable);
-
-    /**
-     * 确认
-     */
-    public abstract void end(Disposable d);
 
 }
