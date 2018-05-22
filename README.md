@@ -42,10 +42,6 @@ Where you need to use the network:
 
 <pre><code>Dove.fly( jobTask.? (Your Interface Service)
 	, new Dover<?>() {
-                    @Override
-                    public void call(@NonNull Disposable d) {
-                        // In the beginning, there will be a notice.
-                    }
 
                     @Override
                     public void don(Disposable d, @NonNull ? thing) {
@@ -56,11 +52,7 @@ Where you need to use the network:
                     public void die(Disposable d, @NonNull Throwable throwable) {
                         // Abnormality
                     }
-
-                    @Override
-                    public void end(Disposable d) {
-                        // Already delivered
-                    }
+		    
                 });
 </code></pre>
 
@@ -81,11 +73,11 @@ Add it in your root build.gradle at the end of repositories:
 			...
 			maven { url 'https://jitpack.io' }
 		}
-	}Copy
+	}
 Step 2. Add the dependency
 
 	dependencies {
-	        compile 'com.github.Deepblue1996:Dove:1.3.4'
+	        compile 'com.github.Deepblue1996:Dove:1.3.5'
 	}
 Step 3. Gradle
 
