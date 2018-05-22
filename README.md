@@ -1,5 +1,9 @@
 ![Image text](https://raw.githubusercontent.com/Deepblue1996/Dove/master/%E9%B8%BD%E5%AD%90.png)
 
+<a href="http://developer.android.com/index.html"><img src="https://img.shields.io/badge/platform-android-green.svg"></a>
+[![](https://jitpack.io/v/Deepblue1996/Dove.svg)](https://jitpack.io/#Deepblue1996/Dove)
+<a href="https://www.apache.org/licenses/LICENSE-2.0"><img src="https://img.shields.io/badge/license-apache-green.svg"></a>
+
 Dove is a convenient network layer framework based on Retrofit2 and RxJava2 for two development and encapsulation.
 
 [[中文文档]](https://github.com/Deepblue1996/Dove/blob/master/README_CN.md)
@@ -81,7 +85,7 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
-	        compile 'com.github.Deepblue1996:Dove:1.3.3'
+	        compile 'com.github.Deepblue1996:Dove:1.3.4'
 	}
 Step 3. Gradle
 
