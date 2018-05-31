@@ -40,7 +40,7 @@ Two:
 
 Where you need to use the network:
 
-<pre><code>Dove.fly( jobTask.? (Your Interface Service)
+<pre><code>Dove.flyLife( Activity, jobTask.? (Your Interface Service)
 	, new Dover<?>() {
 
                     @Override
