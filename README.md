@@ -77,7 +77,7 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
-	        compile 'com.github.Deepblue1996:Dove:1.3.5'
+	        compile 'com.github.Deepblue1996:Dove:x.y.z'
 	}
 Step 3. Gradle
 
