@@ -10,11 +10,19 @@ import java.util.List;
 
 public class TestBean implements Serializable {
 
+    private List<TeacherListBean> teacher_list;
     private List<GoodsListBean> goods_list;
     private List<QueryListBean> query_list;
-    private List<AdvertListBean> advert_list;
     private List<MonthresultBean> monthresult;
-    private List<TeacherListBean> teacher_list;
+    private List<?> advert_list;
+
+    public List<TeacherListBean> getTeacher_list() {
+        return teacher_list;
+    }
+
+    public void setTeacher_list(List<TeacherListBean> teacher_list) {
+        this.teacher_list = teacher_list;
+    }
 
     public List<GoodsListBean> getGoods_list() {
         return goods_list;
@@ -32,14 +40,6 @@ public class TestBean implements Serializable {
         this.query_list = query_list;
     }
 
-    public List<AdvertListBean> getAdvert_list() {
-        return advert_list;
-    }
-
-    public void setAdvert_list(List<AdvertListBean> advert_list) {
-        this.advert_list = advert_list;
-    }
-
     public List<MonthresultBean> getMonthresult() {
         return monthresult;
     }
@@ -48,484 +48,44 @@ public class TestBean implements Serializable {
         this.monthresult = monthresult;
     }
 
-    public List<TeacherListBean> getTeacher_list() {
-        return teacher_list;
+    public List<?> getAdvert_list() {
+        return advert_list;
     }
 
-    public void setTeacher_list(List<TeacherListBean> teacher_list) {
-        this.teacher_list = teacher_list;
+    public void setAdvert_list(List<?> advert_list) {
+        this.advert_list = advert_list;
     }
 
-    public static class GoodsListBean implements Serializable {
+    public static class TeacherListBean {
         /**
-         * goods_name : 韩国现代绞肉机家用电动不锈钢料理碎剁搅肉菜馅辣椒蒜泥器机小型
-         * goods_price : 109
-         * goods_id : 4c2351354f6c4f6ea276f24a59ea9e40
-         * vip_price : 109
-         * goods_salenum : 1
-         * img_name : 4396b77fe07f4e6cbaa78d9b36bd30c9.jpg
-         * img_path : uploadFiles/uploadImgs/20171201/
-         */
-
-        private String goods_name;
-        private double goods_price;
-        private String goods_id;
-        private double vip_price;
-        private int goods_salenum;
-        private String img_name;
-        private String img_path;
-
-        private String level;
-        private int study_num;
-
-        public String getLevel() {
-            return level;
-        }
-
-        public void setLevel(String level) {
-            this.level = level;
-        }
-
-        public int getStudy_num() {
-            return study_num;
-        }
-
-        public void setStudy_num(int study_num) {
-            this.study_num = study_num;
-        }
-
-        public String getGoods_name() {
-            return goods_name;
-        }
-
-        public void setGoods_name(String goods_name) {
-            this.goods_name = goods_name;
-        }
-
-        public double getGoods_price() {
-            return goods_price;
-        }
-
-        public void setGoods_price(double goods_price) {
-            this.goods_price = goods_price;
-        }
-
-        public String getGoods_id() {
-            return goods_id;
-        }
-
-        public void setGoods_id(String goods_id) {
-            this.goods_id = goods_id;
-        }
-
-        public double getVip_price() {
-            return vip_price;
-        }
-
-        public void setVip_price(double vip_price) {
-            this.vip_price = vip_price;
-        }
-
-        public int getGoods_salenum() {
-            return goods_salenum;
-        }
-
-        public void setGoods_salenum(int goods_salenum) {
-            this.goods_salenum = goods_salenum;
-        }
-
-        public String getImg_name() {
-            return img_name;
-        }
-
-        public void setImg_name(String img_name) {
-            this.img_name = img_name;
-        }
-
-        public String getImg_path() {
-            return img_path;
-        }
-
-        public void setImg_path(String img_path) {
-            this.img_path = img_path;
-        }
-    }
-
-    public static class QueryListBean implements Serializable {
-        /**
-         * query_id : 1
-         * user_id : 32666
-         * praise_num : 0
-         * discuss_num : 0
-         * add_time : 1515999663000
-         * user : {"img_name":"42fb9d5307504ec9bf1177dae0d542ed.png","user_id":"32666","img_path":"uploadFiles/uploadImgs/32666/","nickName":"Vincent","userName":"13232934890","freezeBlance":0.11,"availableBalance":93789.88}
-         * content : 我发了第一条提问
-         * goods_id : 6
-         */
-
-        private String query_id;
-        private String user_id;
-        private int praise_num;
-        private int discuss_num;
-        private long add_time;
-        private UserBeanX user;
-        private String content;
-        private String goods_id;
-        private String goods_name;
-        private int teacher_reply;
-
-        public int getTeacher_reply() {
-            return teacher_reply;
-        }
-
-        public void setTeacher_reply(int teacher_reply) {
-            this.teacher_reply = teacher_reply;
-        }
-
-        public String getGoods_name() {
-            return goods_name;
-        }
-
-        public void setGoods_name(String goods_name) {
-            this.goods_name = goods_name;
-        }
-
-        public String getQuery_id() {
-            return query_id;
-        }
-
-        public void setQuery_id(String query_id) {
-            this.query_id = query_id;
-        }
-
-        public String getUser_id() {
-            return user_id;
-        }
-
-        public void setUser_id(String user_id) {
-            this.user_id = user_id;
-        }
-
-        public int getPraise_num() {
-            return praise_num;
-        }
-
-        public void setPraise_num(int praise_num) {
-            this.praise_num = praise_num;
-        }
-
-        public int getDiscuss_num() {
-            return discuss_num;
-        }
-
-        public void setDiscuss_num(int discuss_num) {
-            this.discuss_num = discuss_num;
-        }
-
-        public long getAdd_time() {
-            return add_time;
-        }
-
-        public void setAdd_time(long add_time) {
-            this.add_time = add_time;
-        }
-
-        public UserBeanX getUser() {
-            return user;
-        }
-
-        public void setUser(UserBeanX user) {
-            this.user = user;
-        }
-
-        public String getContent() {
-            return content;
-        }
-
-        public void setContent(String content) {
-            this.content = content;
-        }
-
-        public String getGoods_id() {
-            return goods_id;
-        }
-
-        public void setGoods_id(String goods_id) {
-            this.goods_id = goods_id;
-        }
-
-        public static class UserBeanX implements Serializable {
-            /**
-             * img_name : 42fb9d5307504ec9bf1177dae0d542ed.png
-             * user_id : 32666
-             * img_path : uploadFiles/uploadImgs/32666/
-             * nickName : Vincent
-             * userName : 13232934890
-             * freezeBlance : 0.11
-             * availableBalance : 93789.88
-             */
-
-            private String img_name;
-            private String user_id;
-            private String img_path;
-            private String nickName;
-            private String userName;
-            private double freezeBlance;
-            private double availableBalance;
-
-            public String getImg_name() {
-                return img_name;
-            }
-
-            public void setImg_name(String img_name) {
-                this.img_name = img_name;
-            }
-
-            public String getUser_id() {
-                return user_id;
-            }
-
-            public void setUser_id(String user_id) {
-                this.user_id = user_id;
-            }
-
-            public String getImg_path() {
-                return img_path;
-            }
-
-            public void setImg_path(String img_path) {
-                this.img_path = img_path;
-            }
-
-            public String getNickName() {
-                return nickName;
-            }
-
-            public void setNickName(String nickName) {
-                this.nickName = nickName;
-            }
-
-            public String getUserName() {
-                return userName;
-            }
-
-            public void setUserName(String userName) {
-                this.userName = userName;
-            }
-
-            public double getFreezeBlance() {
-                return freezeBlance;
-            }
-
-            public void setFreezeBlance(double freezeBlance) {
-                this.freezeBlance = freezeBlance;
-            }
-
-            public double getAvailableBalance() {
-                return availableBalance;
-            }
-
-            public void setAvailableBalance(double availableBalance) {
-                this.availableBalance = availableBalance;
-            }
-        }
-    }
-
-    public static class AdvertListBean implements Serializable {
-        /**
-         * path : uploadFiles/uploadImgs/1/
-         * name : 0d1dfa767999425ab93bbfa5104dd089.jpeg
-         * accessory_id : c97282b1384345b98fe3ff231aac76c2
-         * ad_title : 首页幻灯广告1
-         * advert_id : 1
-         * ad_ap_id : 262157
-         */
-
-        private String path;
-        private String name;
-        private String accessory_id;
-        private String ad_title;
-        private String advert_id;
-        private String ad_ap_id;
-
-        public String getPath() {
-            return path;
-        }
-
-        public void setPath(String path) {
-            this.path = path;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getAccessory_id() {
-            return accessory_id;
-        }
-
-        public void setAccessory_id(String accessory_id) {
-            this.accessory_id = accessory_id;
-        }
-
-        public String getAd_title() {
-            return ad_title;
-        }
-
-        public void setAd_title(String ad_title) {
-            this.ad_title = ad_title;
-        }
-
-        public String getAdvert_id() {
-            return advert_id;
-        }
-
-        public void setAdvert_id(String advert_id) {
-            this.advert_id = advert_id;
-        }
-
-        public String getAd_ap_id() {
-            return ad_ap_id;
-        }
-
-        public void setAd_ap_id(String ad_ap_id) {
-            this.ad_ap_id = ad_ap_id;
-        }
-    }
-
-    public static class MonthresultBean implements Serializable {
-        /**
-         * user_id : 214d1d1f759049789abfedef365cd5f2
-         * monthresult_id : 253aad791ce94ee19fba4520c6bcd5c5
-         * title : 2017江门市安信职业安全培训有限公司安全生产管理人员危险化学品经营单位初训17期次补考成绩单
-         * createdtime : 2018-02-07 17:18:58
-         * content : [{"name":"余月仪","card_num":"201700007385","bishi":"76.0","jishi":""},{"name":"刘志红","card_num":"201700007389","bishi":"0.0","jishi":""},{"name":"彭丽薇","card_num":"201700007400","bishi":"0.0","jishi":""},{"name":"方秀云","card_num":"201700007401","bishi":"77.0","jishi":""},{"name":"梁伟杰","card_num":"201700007416","bishi":"76.0","jishi":""},{"name":"罗海荣","card_num":"201700007428","bishi":"0.0","jishi":""},{"name":"陈洁华","card_num":"201700007442","bishi":"0.0","jishi":""},{"name":"董循天","card_num":"201700007432","bishi":"95.0","jishi":""},{"name":"江国兵","card_num":"201700007418","bishi":"0.0","jishi":""},{"name":"陈伟乐","card_num":"201700007440","bishi":"62.0","jishi":""},{"name":"胡贺威","card_num":"201700007431","bishi":"71.0","jishi":""},{"name":"黄晓荣","card_num":"201700007449","bishi":"83.0","jishi":""},{"name":"甘锦桥","card_num":"201700007424","bishi":"69.0","jishi":""},{"name":"李伯成","card_num":"201700007404","bishi":"0.0","jishi":""},{"name":"何史彬","card_num":"201700007382","bishi":"0.0","jishi":""},{"name":"雷淑媛","card_num":"201700007445","bishi":"75.0","jishi":""},{"name":"李晓云","card_num":"201700007405","bishi":"66.0","jishi":""},{"name":"聂世铭","card_num":"201700007429","bishi":"74.0","jishi":""},{"name":"容国斌","card_num":"201700007392","bishi":"76.0","jishi":""},{"name":"黄哲聪","card_num":"201700007448","bishi":"70.0","jishi":""},{"name":"蔡慕柳","card_num":"201700007434","bishi":"90.0","jishi":""}]
-         */
-
-        private String user_id;
-        private String monthresult_id;
-        private String title;
-        private String createdtime;
-        private List<ContentBean> content;
-
-        public String getUser_id() {
-            return user_id;
-        }
-
-        public void setUser_id(String user_id) {
-            this.user_id = user_id;
-        }
-
-        public String getMonthresult_id() {
-            return monthresult_id;
-        }
-
-        public void setMonthresult_id(String monthresult_id) {
-            this.monthresult_id = monthresult_id;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public String getCreatedtime() {
-            return createdtime;
-        }
-
-        public void setCreatedtime(String createdtime) {
-            this.createdtime = createdtime;
-        }
-
-        public List<ContentBean> getContent() {
-            return content;
-        }
-
-        public void setContent(List<ContentBean> content) {
-            this.content = content;
-        }
-
-        public static class ContentBean implements Serializable {
-            /**
-             * name : 余月仪
-             * card_num : 201700007385
-             * bishi : 76.0
-             * jishi :
-             */
-
-            private String name;
-            private String card_num;
-            private String bishi;
-            private String jishi;
-
-            public String getName() {
-                return name;
-            }
-
-            public void setName(String name) {
-                this.name = name;
-            }
-
-            public String getCard_num() {
-                return card_num;
-            }
-
-            public void setCard_num(String card_num) {
-                this.card_num = card_num;
-            }
-
-            public String getBishi() {
-                return bishi;
-            }
-
-            public void setBishi(String bishi) {
-                this.bishi = bishi;
-            }
-
-            public String getJishi() {
-                return jishi;
-            }
-
-            public void setJishi(String jishi) {
-                this.jishi = jishi;
-            }
-        }
-    }
-
-    public static class TeacherListBean implements Serializable {
-        /**
-         * zip : 529300
-         * profession : java开发
-         * teacher_name : 周老师
-         * id_number : 440215122512362234
-         * address : 广东省江门市蓬江区群华路2号3栋
-         * education : 大专
-         * teacher_id : 2
-         * telephone : 2326547
-         * source : 网上
-         * school_max : 北大青鸟
-         * img_name : 78c7f49ab5b94b109ed3f4bcf0cb4caa.jpg
-         * user_id : 32904
-         * school : 北大青鸟
-         * phone : 13422144236
-         * img_path : uploadFiles/uploadImgs/32904/
-         * bz : 备注备注
-         * id_type : 身份证
-         * position : javac开发工程师
-         * state : 1
-         * add_time : 1515398667000
-         * user : {"img_name":"78c7f49ab5b94b109ed3f4bcf0cb4caa.jpg","user_id":"32904","img_path":"uploadFiles/uploadImgs/32904/","name":"美的店主","userName":"123123"}
+         * zip :
+         * profession :
+         * evaluate_score : 42
+         * teacher_name : 杨昆霞
+         * id_number : 420102195410202465
+         * address : 广东省江门市蓬江区建设路9号之三505
+         * education :
+         * teacher_id : d6771df63f8c40d092cfb2fe2bf0ddbb
+         * telephone :
+         * source :
+         * school_max :
+         * img_name : af3cf6ef37f244f4b0233f8930639e37.jpg
+         * school :
+         * phone :
+         * img_path : uploadFiles/uploadImgs/d6771df63f8c40d092cfb2fe2bf0ddbb/
+         * user_id : d6771df63f8c40d092cfb2fe2bf0ddbb
+         * bz :
+         * id_type : 70dbd05695ae4927ba8eb9abda0ea08d
+         * position :
+         * state : 0
+         * add_time : 1522207773000
+         * user : {"img_name":"af3cf6ef37f244f4b0233f8930639e37.jpg","user_id":"d6771df63f8c40d092cfb2fe2bf0ddbb","img_path":"uploadFiles/uploadImgs/d6771df63f8c40d092cfb2fe2bf0ddbb/","nickName":"杨昆霞","userName":"杨昆霞"}
+         * info : <p><strong>杨昆霞老师</strong></p><p><strong><br/></strong></p><p>具有教师资格证书及相关的专业技能证书，</p><p><br/></p><p>长期从事安全培训类工作，积累相当丰富的经验。一直以来在课堂上讲课，深受学员的欢迎和爱戴。讲课内容生动，并切合实际考试内容，是协会和学员推荐的好老师。</p>
          */
 
         private String zip;
         private String profession;
+        private int evaluate_score;
         private String teacher_name;
         private String id_number;
         private String address;
@@ -535,16 +95,17 @@ public class TestBean implements Serializable {
         private String source;
         private String school_max;
         private String img_name;
-        private String user_id;
         private String school;
         private String phone;
         private String img_path;
+        private String user_id;
         private String bz;
         private String id_type;
         private String position;
         private String state;
         private long add_time;
         private UserBean user;
+        private String info;
 
         public String getZip() {
             return zip;
@@ -560,6 +121,14 @@ public class TestBean implements Serializable {
 
         public void setProfession(String profession) {
             this.profession = profession;
+        }
+
+        public int getEvaluate_score() {
+            return evaluate_score;
+        }
+
+        public void setEvaluate_score(int evaluate_score) {
+            this.evaluate_score = evaluate_score;
         }
 
         public String getTeacher_name() {
@@ -634,14 +203,6 @@ public class TestBean implements Serializable {
             this.img_name = img_name;
         }
 
-        public String getUser_id() {
-            return user_id;
-        }
-
-        public void setUser_id(String user_id) {
-            this.user_id = user_id;
-        }
-
         public String getSchool() {
             return school;
         }
@@ -664,6 +225,14 @@ public class TestBean implements Serializable {
 
         public void setImg_path(String img_path) {
             this.img_path = img_path;
+        }
+
+        public String getUser_id() {
+            return user_id;
+        }
+
+        public void setUser_id(String user_id) {
+            this.user_id = user_id;
         }
 
         public String getBz() {
@@ -714,19 +283,27 @@ public class TestBean implements Serializable {
             this.user = user;
         }
 
-        public static class UserBean implements Serializable {
+        public String getInfo() {
+            return info;
+        }
+
+        public void setInfo(String info) {
+            this.info = info;
+        }
+
+        public static class UserBean {
             /**
-             * img_name : 78c7f49ab5b94b109ed3f4bcf0cb4caa.jpg
-             * user_id : 32904
-             * img_path : uploadFiles/uploadImgs/32904/
-             * name : 美的店主
-             * userName : 123123
+             * img_name : af3cf6ef37f244f4b0233f8930639e37.jpg
+             * user_id : d6771df63f8c40d092cfb2fe2bf0ddbb
+             * img_path : uploadFiles/uploadImgs/d6771df63f8c40d092cfb2fe2bf0ddbb/
+             * nickName : 杨昆霞
+             * userName : 杨昆霞
              */
 
             private String img_name;
             private String user_id;
             private String img_path;
-            private String name;
+            private String nickName;
             private String userName;
 
             public String getImg_name() {
@@ -753,12 +330,12 @@ public class TestBean implements Serializable {
                 this.img_path = img_path;
             }
 
-            public String getName() {
-                return name;
+            public String getNickName() {
+                return nickName;
             }
 
-            public void setName(String name) {
-                this.name = name;
+            public void setNickName(String nickName) {
+                this.nickName = nickName;
             }
 
             public String getUserName() {
@@ -767,6 +344,646 @@ public class TestBean implements Serializable {
 
             public void setUserName(String userName) {
                 this.userName = userName;
+            }
+        }
+    }
+
+    public static class GoodsListBean {
+        /**
+         * goods_name : 免费体验课程
+         * level : 初级
+         * goods_price : 0.0
+         * evaluate_num : 0
+         * goods_id : f45c579ce60a40c3956d866a2850e2c5
+         * study_num : 3
+         * vip_price : 0.0
+         * goods_salenum : 3
+         * img_name : 30e718fcd10441ad8f3e2f4eccbcdb35.jpeg
+         * img_path : uploadFiles/uploadImgs/20180516/
+         */
+
+        private String goods_name;
+        private String level;
+        private double goods_price;
+        private int evaluate_num;
+        private String goods_id;
+        private int study_num;
+        private double vip_price;
+        private int goods_salenum;
+        private String img_name;
+        private String img_path;
+
+        public String getGoods_name() {
+            return goods_name;
+        }
+
+        public void setGoods_name(String goods_name) {
+            this.goods_name = goods_name;
+        }
+
+        public String getLevel() {
+            return level;
+        }
+
+        public void setLevel(String level) {
+            this.level = level;
+        }
+
+        public double getGoods_price() {
+            return goods_price;
+        }
+
+        public void setGoods_price(double goods_price) {
+            this.goods_price = goods_price;
+        }
+
+        public int getEvaluate_num() {
+            return evaluate_num;
+        }
+
+        public void setEvaluate_num(int evaluate_num) {
+            this.evaluate_num = evaluate_num;
+        }
+
+        public String getGoods_id() {
+            return goods_id;
+        }
+
+        public void setGoods_id(String goods_id) {
+            this.goods_id = goods_id;
+        }
+
+        public int getStudy_num() {
+            return study_num;
+        }
+
+        public void setStudy_num(int study_num) {
+            this.study_num = study_num;
+        }
+
+        public double getVip_price() {
+            return vip_price;
+        }
+
+        public void setVip_price(double vip_price) {
+            this.vip_price = vip_price;
+        }
+
+        public int getGoods_salenum() {
+            return goods_salenum;
+        }
+
+        public void setGoods_salenum(int goods_salenum) {
+            this.goods_salenum = goods_salenum;
+        }
+
+        public String getImg_name() {
+            return img_name;
+        }
+
+        public void setImg_name(String img_name) {
+            this.img_name = img_name;
+        }
+
+        public String getImg_path() {
+            return img_path;
+        }
+
+        public void setImg_path(String img_path) {
+            this.img_path = img_path;
+        }
+    }
+
+    public static class QueryListBean {
+        /**
+         * goods_name : 生产经营单位安全生产管理人员（初训）
+         * update_time : 1527730509000
+         * query_id : 8d13144a85f14fbe9323e0cdf6f38352
+         * user_id : 674ad95bbce141ad817c57407ee0635a
+         * praise_num : 0
+         * discuss_num : 2
+         * goods_id : 858e2917021d41d6b14bfd256310e89d
+         * add_time : 1527730481000
+         * teacher_reply : 214d1d1f759049789abfedef365cd5f2
+         * user : {"login_type":"WeChat","id_card":"440711198005113018","availableBalance":0,"front_acc_id":"3141190aec6d4edf83a5541ff8105acd","password":"ae04064356d5238e18d818bbde369b2b","learning_time":0,"img_name":"674ad95bbce141ad817c57407ee0635a.jpg","role_id":"3","integral":1,"bz":"swatchan133","back_acc_name":"uploadFiles/uploadImgs/674ad95bbce141ad817c57407ee0635aback_img/03a506be95204bff873a04c6f1151433.jpg","logo":"uploadFiles/uploadImgs/674ad95bbce141ad817c57407ee0635a/674ad95bbce141ad817c57407ee0635a.jpg","commission":0,"company":"共升教育","is_pass":0,"email":"swatchan@139.com","openid":"o_cxM5bdV2FnlknvWkHOKKr2JL2k","last_login":"2018-05-31 10:33:20","nickName":"共升教育安训通","sex":"0","userName":"13356596207","freezeBlance":0,"user_id":"674ad95bbce141ad817c57407ee0635a","phone":"13356596207","createTime":1526445101000,"img_path":"uploadFiles/uploadImgs/674ad95bbce141ad817c57407ee0635a/","front_acc_name":"uploadFiles/uploadImgs/674ad95bbce141ad817c57407ee0635afront_img/265478eb8f5749eb9124bec167047343.jpg","name":"共升教育安训通","back_acc_id":"ddadf05ea2a74adcb80a66ab3322ad5d","acc_id":"578064408dda46a8bcc9766e169376dd","status":"1"}
+         * content : 老师，有什么新的政策啊？
+         */
+
+        private String goods_name;
+        private long update_time;
+        private String query_id;
+        private String user_id;
+        private int praise_num;
+        private int discuss_num;
+        private String goods_id;
+        private long add_time;
+        private String teacher_reply;
+        private UserBeanX user;
+        private String content;
+
+        public String getGoods_name() {
+            return goods_name;
+        }
+
+        public void setGoods_name(String goods_name) {
+            this.goods_name = goods_name;
+        }
+
+        public long getUpdate_time() {
+            return update_time;
+        }
+
+        public void setUpdate_time(long update_time) {
+            this.update_time = update_time;
+        }
+
+        public String getQuery_id() {
+            return query_id;
+        }
+
+        public void setQuery_id(String query_id) {
+            this.query_id = query_id;
+        }
+
+        public String getUser_id() {
+            return user_id;
+        }
+
+        public void setUser_id(String user_id) {
+            this.user_id = user_id;
+        }
+
+        public int getPraise_num() {
+            return praise_num;
+        }
+
+        public void setPraise_num(int praise_num) {
+            this.praise_num = praise_num;
+        }
+
+        public int getDiscuss_num() {
+            return discuss_num;
+        }
+
+        public void setDiscuss_num(int discuss_num) {
+            this.discuss_num = discuss_num;
+        }
+
+        public String getGoods_id() {
+            return goods_id;
+        }
+
+        public void setGoods_id(String goods_id) {
+            this.goods_id = goods_id;
+        }
+
+        public long getAdd_time() {
+            return add_time;
+        }
+
+        public void setAdd_time(long add_time) {
+            this.add_time = add_time;
+        }
+
+        public String getTeacher_reply() {
+            return teacher_reply;
+        }
+
+        public void setTeacher_reply(String teacher_reply) {
+            this.teacher_reply = teacher_reply;
+        }
+
+        public UserBeanX getUser() {
+            return user;
+        }
+
+        public void setUser(UserBeanX user) {
+            this.user = user;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public static class UserBeanX {
+            /**
+             * login_type : WeChat
+             * id_card : 440711198005113018
+             * availableBalance : 0.0
+             * front_acc_id : 3141190aec6d4edf83a5541ff8105acd
+             * password : ae04064356d5238e18d818bbde369b2b
+             * learning_time : 0
+             * img_name : 674ad95bbce141ad817c57407ee0635a.jpg
+             * role_id : 3
+             * integral : 1
+             * bz : swatchan133
+             * back_acc_name : uploadFiles/uploadImgs/674ad95bbce141ad817c57407ee0635aback_img/03a506be95204bff873a04c6f1151433.jpg
+             * logo : uploadFiles/uploadImgs/674ad95bbce141ad817c57407ee0635a/674ad95bbce141ad817c57407ee0635a.jpg
+             * commission : 0.0
+             * company : 共升教育
+             * is_pass : 0
+             * email : swatchan@139.com
+             * openid : o_cxM5bdV2FnlknvWkHOKKr2JL2k
+             * last_login : 2018-05-31 10:33:20
+             * nickName : 共升教育安训通
+             * sex : 0
+             * userName : 13356596207
+             * freezeBlance : 0.0
+             * user_id : 674ad95bbce141ad817c57407ee0635a
+             * phone : 13356596207
+             * createTime : 1526445101000
+             * img_path : uploadFiles/uploadImgs/674ad95bbce141ad817c57407ee0635a/
+             * front_acc_name : uploadFiles/uploadImgs/674ad95bbce141ad817c57407ee0635afront_img/265478eb8f5749eb9124bec167047343.jpg
+             * name : 共升教育安训通
+             * back_acc_id : ddadf05ea2a74adcb80a66ab3322ad5d
+             * acc_id : 578064408dda46a8bcc9766e169376dd
+             * status : 1
+             */
+
+            private String login_type;
+            private String id_card;
+            private double availableBalance;
+            private String front_acc_id;
+            private String password;
+            private int learning_time;
+            private String img_name;
+            private String role_id;
+            private int integral;
+            private String bz;
+            private String back_acc_name;
+            private String logo;
+            private double commission;
+            private String company;
+            private int is_pass;
+            private String email;
+            private String openid;
+            private String last_login;
+            private String nickName;
+            private String sex;
+            private String userName;
+            private double freezeBlance;
+            private String user_id;
+            private String phone;
+            private long createTime;
+            private String img_path;
+            private String front_acc_name;
+            private String name;
+            private String back_acc_id;
+            private String acc_id;
+            private String status;
+
+            public String getLogin_type() {
+                return login_type;
+            }
+
+            public void setLogin_type(String login_type) {
+                this.login_type = login_type;
+            }
+
+            public String getId_card() {
+                return id_card;
+            }
+
+            public void setId_card(String id_card) {
+                this.id_card = id_card;
+            }
+
+            public double getAvailableBalance() {
+                return availableBalance;
+            }
+
+            public void setAvailableBalance(double availableBalance) {
+                this.availableBalance = availableBalance;
+            }
+
+            public String getFront_acc_id() {
+                return front_acc_id;
+            }
+
+            public void setFront_acc_id(String front_acc_id) {
+                this.front_acc_id = front_acc_id;
+            }
+
+            public String getPassword() {
+                return password;
+            }
+
+            public void setPassword(String password) {
+                this.password = password;
+            }
+
+            public int getLearning_time() {
+                return learning_time;
+            }
+
+            public void setLearning_time(int learning_time) {
+                this.learning_time = learning_time;
+            }
+
+            public String getImg_name() {
+                return img_name;
+            }
+
+            public void setImg_name(String img_name) {
+                this.img_name = img_name;
+            }
+
+            public String getRole_id() {
+                return role_id;
+            }
+
+            public void setRole_id(String role_id) {
+                this.role_id = role_id;
+            }
+
+            public int getIntegral() {
+                return integral;
+            }
+
+            public void setIntegral(int integral) {
+                this.integral = integral;
+            }
+
+            public String getBz() {
+                return bz;
+            }
+
+            public void setBz(String bz) {
+                this.bz = bz;
+            }
+
+            public String getBack_acc_name() {
+                return back_acc_name;
+            }
+
+            public void setBack_acc_name(String back_acc_name) {
+                this.back_acc_name = back_acc_name;
+            }
+
+            public String getLogo() {
+                return logo;
+            }
+
+            public void setLogo(String logo) {
+                this.logo = logo;
+            }
+
+            public double getCommission() {
+                return commission;
+            }
+
+            public void setCommission(double commission) {
+                this.commission = commission;
+            }
+
+            public String getCompany() {
+                return company;
+            }
+
+            public void setCompany(String company) {
+                this.company = company;
+            }
+
+            public int getIs_pass() {
+                return is_pass;
+            }
+
+            public void setIs_pass(int is_pass) {
+                this.is_pass = is_pass;
+            }
+
+            public String getEmail() {
+                return email;
+            }
+
+            public void setEmail(String email) {
+                this.email = email;
+            }
+
+            public String getOpenid() {
+                return openid;
+            }
+
+            public void setOpenid(String openid) {
+                this.openid = openid;
+            }
+
+            public String getLast_login() {
+                return last_login;
+            }
+
+            public void setLast_login(String last_login) {
+                this.last_login = last_login;
+            }
+
+            public String getNickName() {
+                return nickName;
+            }
+
+            public void setNickName(String nickName) {
+                this.nickName = nickName;
+            }
+
+            public String getSex() {
+                return sex;
+            }
+
+            public void setSex(String sex) {
+                this.sex = sex;
+            }
+
+            public String getUserName() {
+                return userName;
+            }
+
+            public void setUserName(String userName) {
+                this.userName = userName;
+            }
+
+            public double getFreezeBlance() {
+                return freezeBlance;
+            }
+
+            public void setFreezeBlance(double freezeBlance) {
+                this.freezeBlance = freezeBlance;
+            }
+
+            public String getUser_id() {
+                return user_id;
+            }
+
+            public void setUser_id(String user_id) {
+                this.user_id = user_id;
+            }
+
+            public String getPhone() {
+                return phone;
+            }
+
+            public void setPhone(String phone) {
+                this.phone = phone;
+            }
+
+            public long getCreateTime() {
+                return createTime;
+            }
+
+            public void setCreateTime(long createTime) {
+                this.createTime = createTime;
+            }
+
+            public String getImg_path() {
+                return img_path;
+            }
+
+            public void setImg_path(String img_path) {
+                this.img_path = img_path;
+            }
+
+            public String getFront_acc_name() {
+                return front_acc_name;
+            }
+
+            public void setFront_acc_name(String front_acc_name) {
+                this.front_acc_name = front_acc_name;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getBack_acc_id() {
+                return back_acc_id;
+            }
+
+            public void setBack_acc_id(String back_acc_id) {
+                this.back_acc_id = back_acc_id;
+            }
+
+            public String getAcc_id() {
+                return acc_id;
+            }
+
+            public void setAcc_id(String acc_id) {
+                this.acc_id = acc_id;
+            }
+
+            public String getStatus() {
+                return status;
+            }
+
+            public void setStatus(String status) {
+                this.status = status;
+            }
+        }
+    }
+
+    public static class MonthresultBean {
+        /**
+         * user_id : 36dc64c789c44925aaac6915c39ea28f
+         * monthresult_id : 38fd1996b49f46e5a8c7eb31ff598bf1
+         * title : 2018江门市安信职业安全培训有限公司安全生产管理人员危险化学品生产单位复训1期次全部考生成绩单
+         * createdtime : 2018-05-08 17:24:47
+         * content : [{"name":"陆自忠","card_num":"201800000984","bishi":"85.0","jishi":""},{"name":"伍成俊","card_num":"201800000971","bishi":"91.0","jishi":""},{"name":"种强","card_num":"201800000979","bishi":"91.0","jishi":""},{"name":"邓锡培","card_num":"201800000982","bishi":"98.0","jishi":""},{"name":"邓兆洪","card_num":"201800000981","bishi":"88.0","jishi":""},{"name":"侯东旭","card_num":"201800000972","bishi":"84.0","jishi":""},{"name":"林志豪","card_num":"201800000975","bishi":"83.0","jishi":""},{"name":"罗国恩","card_num":"201800000980","bishi":"82.0","jishi":""},{"name":"冯应文","card_num":"201800000973","bishi":"83.0","jishi":""},{"name":"金实建","card_num":"201800000983","bishi":"88.0","jishi":""},{"name":"梁炎华","card_num":"201800000976","bishi":"84.0","jishi":""},{"name":"黄凤华","card_num":"201800000985","bishi":"77.0","jishi":""},{"name":"周贵理","card_num":"201800000974","bishi":"77.0","jishi":""},{"name":"江文松","card_num":"201800000977","bishi":"0.0","jishi":""},{"name":"王未清","card_num":"201800000978","bishi":"71.0","jishi":""}]
+         */
+
+        private String user_id;
+        private String monthresult_id;
+        private String title;
+        private String createdtime;
+        private List<ContentBean> content;
+
+        public String getUser_id() {
+            return user_id;
+        }
+
+        public void setUser_id(String user_id) {
+            this.user_id = user_id;
+        }
+
+        public String getMonthresult_id() {
+            return monthresult_id;
+        }
+
+        public void setMonthresult_id(String monthresult_id) {
+            this.monthresult_id = monthresult_id;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getCreatedtime() {
+            return createdtime;
+        }
+
+        public void setCreatedtime(String createdtime) {
+            this.createdtime = createdtime;
+        }
+
+        public List<ContentBean> getContent() {
+            return content;
+        }
+
+        public void setContent(List<ContentBean> content) {
+            this.content = content;
+        }
+
+        public static class ContentBean {
+            /**
+             * name : 陆自忠
+             * card_num : 201800000984
+             * bishi : 85.0
+             * jishi :
+             */
+
+            private String name;
+            private String card_num;
+            private String bishi;
+            private String jishi;
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getCard_num() {
+                return card_num;
+            }
+
+            public void setCard_num(String card_num) {
+                this.card_num = card_num;
+            }
+
+            public String getBishi() {
+                return bishi;
+            }
+
+            public void setBishi(String bishi) {
+                this.bishi = bishi;
+            }
+
+            public String getJishi() {
+                return jishi;
+            }
+
+            public void setJishi(String jishi) {
+                this.jishi = jishi;
             }
         }
     }

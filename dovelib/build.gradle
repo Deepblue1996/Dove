@@ -39,8 +39,8 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.10.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.10.0'
 
-    compile 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
-    compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'
+    compile 'com.uber.autodispose:autodispose:0.8.0'
+    compile 'com.uber.autodispose:autodispose-android-archcomponents:0.8.0'
 
     compile 'com.orhanobut:logger:2.1.1'
 }

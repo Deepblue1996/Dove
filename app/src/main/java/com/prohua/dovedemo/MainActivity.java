@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         testData = findViewById(R.id.testData);
 
         // 放信到鸽子里，呼唤它飞到收信者那里
-        Dove.fly(Core.jobTask().getTestDataPost(null),
+        Dove.flyLife(this, Core.jobTask().getTestDataPost(null),
                 new Dover<NetBase<TestBean>>() {
 
                     @Override
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void die(Disposable d, @NonNull Throwable throwable) {
                         // 失败/中断
-                        testData.setText(testData.getText() + "\n" + "中断");
+                        testData.setText(throwable.getMessage() + "\n" + "中断");
                     }
 
                 });

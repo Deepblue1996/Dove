@@ -1,5 +1,7 @@
 package com.prohua.dove;
 
+import android.app.Activity;
+import android.arch.lifecycle.LifecycleOwner;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
@@ -12,6 +14,8 @@ import com.prohua.dove.interceptor.DoveLoggingInterceptor;
 import com.prohua.dove.interceptor.DoveNetworkInterceptor;
 import com.prohua.dove.interceptor.DoveNotNetworkInterceptor;
 import com.prohua.dove.utils.HttpResponseFunc;
+import com.uber.autodispose.AutoDispose;
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -231,7 +235,7 @@ public class Dove {
             public Response intercept(@NonNull Chain chain) throws IOException {
                 Request oldRequest = chain.request();
 
-                Request newRequest = null;
+                Request newRequest;
                 // 判断请求类型 - POST
                 if (NET_POST.equals(oldRequest.method()) && NET_URL_ENCODED.equals(oldRequest.body().contentType().subtype())) {
                     newRequest = addPostParams(oldRequest, nest.getGlobalParams());
@@ -281,6 +285,23 @@ public class Dove {
                 .observeOn(AndroidSchedulers.mainThread())
                 //HttpResponseFunc（）为拦截onError事件的拦截器
                 .onErrorResumeNext(new HttpResponseFunc<T>())
+                .subscribe(observer);
+    }
+
+    /**
+     * Encapsulation method provided by default
+     *
+     * @param observable Interface method
+     * @param observer   Listen method
+     * @param <T>        void
+     */
+    public static <T> void flyLife(Activity activity, Observable<T> observable, Dover<T> observer) {
+        observable.subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                //HttpResponseFunc（）为拦截onError事件的拦截器
+                .onErrorResumeNext(new HttpResponseFunc<T>())
+                .as(AutoDispose.<T>autoDisposable(AndroidLifecycleScopeProvider.from((LifecycleOwner) activity)))
                 .subscribe(observer);
     }
 
