@@ -1,4 +1,4 @@
-![Image text](https://raw.githubusercontent.com/Deepblue1996/Dove/master/%E9%B8%BD%E5%AD%90.png)
+![Image text](https://raw.githubusercontent.com/Deepblue1996/Dove/master/Dove-logo.png)
 
 <a href="http://developer.android.com/index.html"><img src="https://img.shields.io/badge/platform-android-green.svg"></a>
 [![](https://jitpack.io/v/Deepblue1996/Dove.svg)](https://jitpack.io/#Deepblue1996/Dove)
@@ -40,7 +40,7 @@ Two:
 
 Where you need to use the network:
 
-<pre><code>Dove.fly( jobTask.? (Your Interface Service)
+<pre><code>Dove.flyLife( Activity, jobTask.? (Your Interface Service)
 	, new Dover<?>() {
 
                     @Override
@@ -77,7 +77,7 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
-	        compile 'com.github.Deepblue1996:Dove:1.3.5'
+	        compile 'com.github.Deepblue1996:Dove:x.y.z'
 	}
 Step 3. Gradle
 

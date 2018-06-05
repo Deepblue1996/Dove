@@ -1,4 +1,4 @@
-![Image text](https://raw.githubusercontent.com/Deepblue1996/Dove/master/%E9%B8%BD%E5%AD%90.png)
+![Image text](https://raw.githubusercontent.com/Deepblue1996/Dove/master/Dove-logo.png)
 
 <a href="http://developer.android.com/index.html"><img src="https://img.shields.io/badge/platform-android-green.svg"></a>
 [![](https://jitpack.io/v/Deepblue1996/Dove.svg)](https://jitpack.io/#Deepblue1996/Dove)
@@ -40,7 +40,7 @@ Dove.birh(?), 它将返回你设置的接口对象;
 
 在你想获取网络数据的地方，添加一下代码:
 
-<pre><code>Dove.fly( jobTask.? (Your Interface Service)
+<pre><code>Dove.flyLife( Activity, jobTask.? (Your Interface Service)
 	, new Dover<?>() {
                     @Override
                     public void don(Disposable d, @NonNull ? thing) {
@@ -75,7 +75,7 @@ leiningen
 步骤 2. 添加 dependency
 
 	dependencies {
-	        compile 'com.github.Deepblue1996:Dove:1.3.5'
+	        compile 'com.github.Deepblue1996:Dove:x.y.z'
 	}
 步骤 3. 构建
 	
