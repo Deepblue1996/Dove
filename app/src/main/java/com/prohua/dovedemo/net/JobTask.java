@@ -22,6 +22,7 @@ public interface JobTask {
 
     /**
      * GET 请求
+     *
      * @return
      */
     @GET("appgoods/index_all_list")
@@ -29,6 +30,7 @@ public interface JobTask {
 
     /**
      * POST 请求
+     *
      * @param hasNull
      * @return
      */
@@ -38,6 +40,7 @@ public interface JobTask {
 
     /**
      * POST 方式上传
+     *
      * @param files
      * @return
      */

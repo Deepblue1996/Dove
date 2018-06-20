@@ -19,7 +19,6 @@ public class Nest {
     private HashMap<String, String> params;
 
     // cacheSize
-    private long cacheSize = DefaultConfig.SIZE_OF_CACHE;
     private long disconnectTime = DefaultConfig.TIMEOUT_DISCONNECT;
     private long connectTime = DefaultConfig.TIMEOUT_CONNECT;
 
@@ -63,15 +62,6 @@ public class Nest {
 
     public Nest setInterfaceClass(Class interfaceClass) {
         this.interfaceClass = interfaceClass;
-        return nest;
-    }
-
-    public long getCacheSize() {
-        return cacheSize;
-    }
-
-    public Nest setCacheSize(long cacheSize) {
-        this.cacheSize = cacheSize;
         return nest;
     }
 

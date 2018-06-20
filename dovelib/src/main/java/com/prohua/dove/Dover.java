@@ -43,7 +43,7 @@ public abstract class Dover<T> implements Observer<T> {
     /**
      * 中途断了
      *
-     * @param d 订阅
+     * @param d         订阅
      * @param throwable 异常信息
      */
     public abstract void die(Disposable d, @NonNull Throwable throwable);

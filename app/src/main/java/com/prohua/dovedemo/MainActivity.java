@@ -5,13 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.prohua.dove.Dove;
 import com.prohua.dove.Dover;
 import com.prohua.dovedemo.app.Core;
 import com.prohua.dovedemo.bean.ImgBean;
-import com.prohua.dovedemo.bean.TestBean;
 import com.prohua.dovedemo.bean.NetBase;
+import com.prohua.dovedemo.bean.TestBean;
 
 import java.util.ArrayList;
 import java.util.List;

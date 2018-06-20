@@ -16,9 +16,15 @@ import com.prohua.dove.interceptor.DoveNotNetworkInterceptor;
 import com.prohua.dove.utils.HttpResponseFunc;
 import com.uber.autodispose.AutoDispose;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
+import com.zchu.rxcache.RxCache;
+import com.zchu.rxcache.data.CacheResult;
+import com.zchu.rxcache.diskconverter.GsonDiskConverter;
+import com.zchu.rxcache.stategy.CacheStrategy;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +33,6 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.Cache;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -63,6 +68,8 @@ public class Dove {
 
     private static Nest nest;
 
+    private static RxCache rxCache;
+
     /**
      * Birth a nest Global singleton static.
      */
@@ -72,6 +79,7 @@ public class Dove {
             synchronized (Dove.class) {
                 if (null == mInstance) {
                     mInstance = new Dove(context, nest);
+
                 }
             }
         }
@@ -95,15 +103,25 @@ public class Dove {
         Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
 
         // 缓存路径
-        String cacheFile = context.getCacheDir() + "/http";
+        String cacheFile = context.getCacheDir() + File.separator + "http";
 
-        Cache cache = new Cache(new File(cacheFile), nest.getCacheSize());
+        //Cache cache = new Cache(new File(cacheFile), nest.getCacheSize());
+
+        rxCache = new RxCache.Builder()
+                // 当版本号改变,缓存路径下存储的所有数据都会被清除掉
+                .appVersion(1)
+                .diskDir(new File(cacheFile + File.separator + "data-cache"))
+                // 支持Serializable、Json(GsonDiskConverter)
+                .diskConverter(new GsonDiskConverter())
+                .memoryMax(2 * 1024 * 1024)
+                .diskMax(20 * 1024 * 1024)
+                .build();
 
         Retrofit retrofit = new Retrofit.Builder()
                 // 设置网络请求的Url地址
                 .baseUrl(nest.getBaseUrl())
                 // 设置OkHttp
-                .client(getDoveHttpClient(context, cache, nest))
+                .client(getDoveHttpClient(context, nest))
                 // 设置Json数据解析器
                 .addConverterFactory(GsonConverterFactory.create())
                 // 支持RxJava平台
@@ -118,10 +136,9 @@ public class Dove {
      * OkHttpClient
      *
      * @param context 上下文
-     * @param cache   缓存
      * @return OkHttp
      */
-    private OkHttpClient getDoveHttpClient(final Context context, final Cache cache, final Nest nest) {
+    private OkHttpClient getDoveHttpClient(final Context context, final Nest nest) {
 
         return new OkHttpClient.Builder()
                 .connectTimeout(nest.getConnectTime(), TimeUnit.SECONDS)
@@ -129,7 +146,6 @@ public class Dove {
                 .addNetworkInterceptor(new DoveNetworkInterceptor(nest.getConnectTime()))
                 .addInterceptor(new DoveNotNetworkInterceptor(context, nest.getDisconnectTime()))
                 .addInterceptor(getLoggingInterceptor())
-                .cache(cache)
                 .build();
     }
 
@@ -227,6 +243,7 @@ public class Dove {
      *
      * @return Interceptor
      */
+    @SuppressWarnings("unchecked") // Single-interface proxy creation guarded by parameter safety.
     private Interceptor addParamsInterceptor(final Nest nest) {
 
         return new Interceptor() {
@@ -273,7 +290,7 @@ public class Dove {
     }
 
     /**
-     * Encapsulation method provided by default
+     * Encapsulation method provided by default T
      *
      * @param observable Interface method
      * @param observer   Listen method
@@ -283,23 +300,30 @@ public class Dove {
         observable.subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                //HttpResponseFunc（）为拦截onError事件的拦截器
                 .onErrorResumeNext(new HttpResponseFunc<T>())
                 .subscribe(observer);
     }
 
     /**
-     * Encapsulation method provided by default
+     * Encapsulation method provided by default T
      *
+     * @param activity   Activity context
      * @param observable Interface method
      * @param observer   Listen method
      * @param <T>        void
      */
     public static <T> void flyLife(Activity activity, Observable<T> observable, Dover<T> observer) {
-        observable.subscribeOn(Schedulers.newThread())
+
+        // get T class type info
+        Type type = ((ParameterizedType) observer.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+
+        observable
+                .compose(rxCache.<T>transformObservable(type.toString(), type, CacheStrategy.firstRemote()))
+                .map(new CacheResult.MapFunc<T>())
+                .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                //HttpResponseFunc（）为拦截onError事件的拦截器
+                // HttpResponseFunc（）为拦截onError事件的拦截器
                 .onErrorResumeNext(new HttpResponseFunc<T>())
                 .as(AutoDispose.<T>autoDisposable(AndroidLifecycleScopeProvider.from((LifecycleOwner) activity)))
                 .subscribe(observer);
