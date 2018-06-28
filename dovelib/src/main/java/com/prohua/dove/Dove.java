@@ -290,12 +290,14 @@ public class Dove {
     }
 
     /**
+     * @Deprecated
      * Encapsulation method provided by default T
      *
      * @param observable Interface method
      * @param observer   Listen method
      * @param <T>        void
      */
+    @Deprecated
     public static <T> void fly(Observable<T> observable, Dover<T> observer) {
         observable.subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
