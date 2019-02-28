@@ -164,6 +164,7 @@ public class Dove {
      *
      * @param oldRequest request
      * @param maps       maps
+     * @param headers    headers
      * @return new request
      */
     private Request addGetParams(Request oldRequest, HashMap<String, String> maps, HashMap<String, String> headers) {
@@ -184,7 +185,7 @@ public class Dove {
                 .method(oldRequest.method(), oldRequest.body())
                 .url(urlBuilder.build());
 
-        for (Object o : maps.entrySet()) {
+        for (Object o : headers.entrySet()) {
             Map.Entry entry = (Map.Entry) o;
             String key = (String) entry.getKey();
             String val = (String) entry.getValue();
@@ -198,8 +199,9 @@ public class Dove {
     /**
      * POST request to add parameters
      *
-     * @param request request
-     * @param maps    maps
+     * @param request  request
+     * @param maps     maps
+     * @param headers  headers
      * @return new request
      */
     private Request addPostParams(Request oldRequest, HashMap<String, String> maps, HashMap<String, String> headers) {
@@ -224,7 +226,7 @@ public class Dove {
                 .post(RequestBody.create(MediaType.parse(NET_URL_ENCODED_L),
                         postBodyString));
 
-        for (Object o : maps.entrySet()) {
+        for (Object o : headers.entrySet()) {
             Map.Entry entry = (Map.Entry) o;
             String key = (String) entry.getKey();
             String val = (String) entry.getValue();
