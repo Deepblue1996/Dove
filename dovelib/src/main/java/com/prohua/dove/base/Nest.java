@@ -29,6 +29,7 @@ public class Nest {
 
     private Nest() {
         params = new HashMap<>();
+        headers = new HashMap<>();
     }
 
     /**

@@ -7,8 +7,8 @@ android {
         applicationId "com.prohua.dovedemo"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 38
-        versionName "1.3.9"
+        versionCode 39
+        versionName "1.4.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
