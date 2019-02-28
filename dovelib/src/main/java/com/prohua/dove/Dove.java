@@ -166,7 +166,7 @@ public class Dove {
      * @param maps       maps
      * @return new request
      */
-    private Request addGetParams(Request oldRequest, HashMap<String, String> maps) {
+    private Request addGetParams(Request oldRequest, HashMap<String, String> maps, HashMap<String, String> headers) {
         //添加固定参数
         HttpUrl.Builder urlBuilder = oldRequest.url()
                 .newBuilder()
@@ -180,11 +180,19 @@ public class Dove {
             urlBuilder.addQueryParameter(key, val);
         }
 
-        //生成新的请求
-        return oldRequest.newBuilder()
+        Request.Builder newBuilder = oldRequest.newBuilder()
                 .method(oldRequest.method(), oldRequest.body())
-                .url(urlBuilder.build())
-                .build();
+                .url(urlBuilder.build());
+
+        for (Object o : maps.entrySet()) {
+            Map.Entry entry = (Map.Entry) o;
+            String key = (String) entry.getKey();
+            String val = (String) entry.getValue();
+            newBuilder.header(key, val);
+        }
+
+        //生成新的请求
+        return newBuilder.build();
     }
 
     /**
@@ -194,7 +202,7 @@ public class Dove {
      * @param maps    maps
      * @return new request
      */
-    private Request addPostParams(Request request, HashMap<String, String> maps) {
+    private Request addPostParams(Request oldRequest, HashMap<String, String> maps, HashMap<String, String> headers) {
         // 创建新的请求体
         FormBody.Builder builder = new FormBody.Builder();
 
@@ -208,14 +216,23 @@ public class Dove {
         RequestBody formBody = builder.build();
 
         // 转换结构
-        String postBodyString = bodyToString(request.body());
+        String postBodyString = bodyToString(oldRequest.body());
         // 合并String
         postBodyString += ((postBodyString.length() > 0) ? "&" : "") + bodyToString(formBody);
-        // 创建新的请求体
-        return request.newBuilder()
+
+        Request.Builder newBuilder = oldRequest.newBuilder()
                 .post(RequestBody.create(MediaType.parse(NET_URL_ENCODED_L),
-                        postBodyString))
-                .build();
+                        postBodyString));
+
+        for (Object o : maps.entrySet()) {
+            Map.Entry entry = (Map.Entry) o;
+            String key = (String) entry.getKey();
+            String val = (String) entry.getValue();
+            newBuilder.header(key, val);
+        }
+
+        // 创建新的请求体
+        return newBuilder.build();
     }
 
     /**
@@ -255,12 +272,13 @@ public class Dove {
                 Request newRequest;
                 // 判断请求类型 - POST
                 if (NET_POST.equals(oldRequest.method()) && NET_URL_ENCODED.equals(oldRequest.body().contentType().subtype())) {
-                    newRequest = addPostParams(oldRequest, nest.getGlobalParams());
+                    newRequest = addPostParams(oldRequest, nest.getGlobalParams(), nest.getHeaders());
                 } else if (NET_GET.equals(oldRequest.method())) {
-                    newRequest = addGetParams(oldRequest, nest.getGlobalParams());
+                    newRequest = addGetParams(oldRequest, nest.getGlobalParams(), nest.getHeaders());
                 } else {
                     newRequest = oldRequest;
                 }
+
                 return chain.proceed(newRequest);
             }
         };
@@ -290,12 +308,10 @@ public class Dove {
     }
 
     /**
-     * @Deprecated
-     * Encapsulation method provided by default T
-     *
      * @param observable Interface method
      * @param observer   Listen method
      * @param <T>        void
+     * @Deprecated Encapsulation method provided by default T
      */
     @Deprecated
     public static <T> void fly(Observable<T> observable, Dover<T> observer) {

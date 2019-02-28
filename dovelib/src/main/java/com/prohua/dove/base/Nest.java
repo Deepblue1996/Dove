@@ -17,6 +17,8 @@ public class Nest {
     private Class interfaceClass;
     // Global parameters
     private HashMap<String, String> params;
+    // Global headers
+    private HashMap<String, String> headers;
 
     // cacheSize
     private long disconnectTime = DefaultConfig.TIMEOUT_DISCONNECT;
@@ -99,5 +101,23 @@ public class Nest {
 
     public void clearParams() {
         params.clear();
+    }
+
+    public Nest addHeader(String key, String value) {
+        headers.put(key, value);
+        return nest;
+    }
+
+    public Nest addHeaders(HashMap<String, String> maps) {
+        headers.putAll(maps);
+        return nest;
+    }
+
+    public HashMap<String, String> getHeaders() {
+        return headers;
+    }
+
+    public void clearHeaders() {
+        headers.clear();
     }
 }
