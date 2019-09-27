@@ -1,7 +1,6 @@
 package com.prohua.dove;
 
 import android.app.Activity;
-import androidx.lifecycle.LifecycleOwner;
 import android.content.Context;
 import androidx.annotation.NonNull;
 
@@ -14,8 +13,6 @@ import com.prohua.dove.interceptor.DoveLoggingInterceptor;
 import com.prohua.dove.interceptor.DoveNetworkInterceptor;
 import com.prohua.dove.interceptor.DoveNotNetworkInterceptor;
 import com.prohua.dove.utils.HttpResponseFunc;
-import com.uber.autodispose.AutoDispose;
-import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 import com.zchu.rxcache.RxCache;
 import com.zchu.rxcache.data.CacheResult;
 import com.zchu.rxcache.diskconverter.GsonDiskConverter;
@@ -346,7 +343,7 @@ public class Dove {
                 .observeOn(AndroidSchedulers.mainThread())
                 // HttpResponseFunc（）为拦截onError事件的拦截器
                 .onErrorResumeNext(new HttpResponseFunc<T>())
-                .as(AutoDispose.<T>autoDisposable(AndroidLifecycleScopeProvider.from((LifecycleOwner) activity)))
+                //.as(AutoDispose.<T>autoDisposable(AndroidLifecycleScopeProvider.from((LifecycleOwner) activity)))
                 .subscribe(observer);
     }
 

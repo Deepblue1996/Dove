@@ -32,8 +32,8 @@ dependencies {
     api 'com.squareup.okhttp3:okhttp:4.2.0'
     api 'com.squareup.okhttp3:logging-interceptor:4.2.0'
 
-    implementation 'com.uber.autodispose:autodispose:0.8.0'
-    implementation 'com.uber.autodispose:autodispose-android-archcomponents:0.8.0'
+    //implementation 'com.uber.autodispose:autodispose:0.8.0'
+    //implementation 'com.uber.autodispose:autodispose-android-archcomponents:0.8.0'
 
     implementation 'com.orhanobut:logger:2.2.0'
     implementation 'com.zchu:rxcache:2.3.5'
