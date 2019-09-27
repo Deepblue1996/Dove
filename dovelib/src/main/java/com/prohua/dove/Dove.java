@@ -3,6 +3,7 @@ package com.prohua.dove;
 import android.app.Activity;
 import android.content.Context;
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
@@ -13,6 +14,8 @@ import com.prohua.dove.interceptor.DoveLoggingInterceptor;
 import com.prohua.dove.interceptor.DoveNetworkInterceptor;
 import com.prohua.dove.interceptor.DoveNotNetworkInterceptor;
 import com.prohua.dove.utils.HttpResponseFunc;
+import com.uber.autodispose.AutoDispose;
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 import com.zchu.rxcache.RxCache;
 import com.zchu.rxcache.data.CacheResult;
 import com.zchu.rxcache.diskconverter.GsonDiskConverter;
@@ -87,6 +90,7 @@ public class Dove {
     /**
      * Dove structure
      */
+    @SuppressWarnings("unchecked")
     private Dove(final Context context, final Nest nest) {
 
         Dove.nest = nest;
@@ -197,7 +201,7 @@ public class Dove {
     /**
      * POST request to add parameters
      *
-     * @param request  request
+     * @param request  oldRequest
      * @param maps     maps
      * @param headers  headers
      * @return new request
@@ -260,27 +264,23 @@ public class Dove {
      *
      * @return Interceptor
      */
-    @SuppressWarnings("unchecked") // Single-interface proxy creation guarded by parameter safety.
+    // Single-interface proxy creation guarded by parameter safety.
     private Interceptor addParamsInterceptor(final Nest nest) {
 
-        return new Interceptor() {
+        return chain -> {
+            Request oldRequest = chain.request();
 
-            @Override
-            public Response intercept(@NonNull Chain chain) throws IOException {
-                Request oldRequest = chain.request();
-
-                Request newRequest;
-                // 判断请求类型 - POST
-                if (NET_POST.equals(oldRequest.method()) && NET_URL_ENCODED.equals(oldRequest.body().contentType().subtype())) {
-                    newRequest = addPostParams(oldRequest, nest.getGlobalParams(), nest.getHeaders());
-                } else if (NET_GET.equals(oldRequest.method())) {
-                    newRequest = addGetParams(oldRequest, nest.getGlobalParams(), nest.getHeaders());
-                } else {
-                    newRequest = oldRequest;
-                }
-
-                return chain.proceed(newRequest);
+            Request newRequest;
+            // 判断请求类型 - POST
+            if (NET_POST.equals(oldRequest.method()) && NET_URL_ENCODED.equals(oldRequest.body().contentType().subtype())) {
+                newRequest = addPostParams(oldRequest, nest.getGlobalParams(), nest.getHeaders());
+            } else if (NET_GET.equals(oldRequest.method())) {
+                newRequest = addGetParams(oldRequest, nest.getGlobalParams(), nest.getHeaders());
+            } else {
+                newRequest = oldRequest;
             }
+
+            return chain.proceed(newRequest);
         };
     }
 
@@ -336,14 +336,14 @@ public class Dove {
         Type type = ((ParameterizedType) Objects.requireNonNull(observer.getClass().getGenericSuperclass())).getActualTypeArguments()[0];
 
         observable
-                .compose(rxCache.<T>transformObservable(type.toString(), type, CacheStrategy.firstRemote()))
-                .map(new CacheResult.MapFunc<T>())
+                .compose(rxCache.transformObservable(type.toString(), type, CacheStrategy.firstRemote()))
+                .map(new CacheResult.MapFunc<>())
                 .subscribeOn(Schedulers.newThread())
                 .unsubscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 // HttpResponseFunc（）为拦截onError事件的拦截器
-                .onErrorResumeNext(new HttpResponseFunc<T>())
-                //.as(AutoDispose.<T>autoDisposable(AndroidLifecycleScopeProvider.from((LifecycleOwner) activity)))
+                .onErrorResumeNext(new HttpResponseFunc<>())
+                .as(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from((LifecycleOwner) activity)))
                 .subscribe(observer);
     }
 
