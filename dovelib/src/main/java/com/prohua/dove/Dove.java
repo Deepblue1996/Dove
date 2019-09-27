@@ -1,9 +1,9 @@
 package com.prohua.dove;
 
 import android.app.Activity;
-import android.arch.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LifecycleOwner;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
@@ -28,6 +28,7 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -335,7 +336,7 @@ public class Dove {
     public static <T> void flyLife(Activity activity, Observable<T> observable, Dover<T> observer) {
 
         // get T class type info
-        Type type = ((ParameterizedType) observer.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        Type type = ((ParameterizedType) Objects.requireNonNull(observer.getClass().getGenericSuperclass())).getActualTypeArguments()[0];
 
         observable
                 .compose(rxCache.<T>transformObservable(type.toString(), type, CacheStrategy.firstRemote()))

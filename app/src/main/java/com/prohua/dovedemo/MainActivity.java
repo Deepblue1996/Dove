@@ -1,7 +1,10 @@
 package com.prohua.dovedemo;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -15,7 +18,6 @@ import com.prohua.dovedemo.bean.TestBean;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import okhttp3.MultipartBody;
 
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         Dove.flyLife(this, Core.jobTask().getTestDataPost(null),
                 new Dover<NetBase<TestBean>>() {
 
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void don(Disposable d, @NonNull NetBase<TestBean> testBeanNetBase) {
                         // 接收/收到
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
                         testData.setText(testData.getText() + "\n" + txt);
                     }
 
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void die(Disposable d, @NonNull Throwable throwable) {
                         // 失败/中断
@@ -63,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         Dove.flyLife(this, Core.jobTask().uploadImageAvator(filePartList),
                 new Dover<NetBase<ImgBean>>() {
 
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void don(Disposable d, @NonNull NetBase<ImgBean> testBeanNetBase) {
                         // 接收/收到
@@ -71,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
                         testData.setText(testData.getText() + "\n" + txt);
                     }
 
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void die(Disposable d, @NonNull Throwable throwable) {
                         // 失败/中断
