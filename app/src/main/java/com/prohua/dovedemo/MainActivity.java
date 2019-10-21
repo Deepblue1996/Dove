@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -33,8 +34,10 @@ public class MainActivity extends AppCompatActivity {
 
         testData = findViewById(R.id.testData);
 
+        Dove.workInit(this);
+
         // 放信到鸽子里，呼唤它飞到收信者那里
-        Dove.flyLife(this, Core.jobTask().getTestDataPost(null),
+        Dove.flyLife(Core.jobTask().getTestDataPost(null),
                 new Dover<NetBase<TestBean>>() {
 
                     @SuppressLint("SetTextI18n")
@@ -64,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         MultipartBody.Part[] filePartList = Dove.filesPart(keyList, pathList);
 
         // 上传提交
-        Dove.flyLife(this, Core.jobTask().uploadImageAvator(filePartList),
+        Dove.flyLife(Core.jobTask().uploadImageAvator(filePartList),
                 new Dover<NetBase<ImgBean>>() {
 
                     @SuppressLint("SetTextI18n")
