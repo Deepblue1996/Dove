@@ -3,14 +3,14 @@ apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.Deepblue1996'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     buildToolsVersion "28.0.3"
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 41
-        versionName "1.4.3"
+        versionName "1.4.4"
     }
     buildTypes {
         release {
@@ -40,5 +40,5 @@ dependencies {
     implementation 'com.uber.autodispose:autodispose-android-archcomponents:1.4.0'
 
     api 'com.orhanobut:logger:2.2.0'
-    api 'com.zchu:rxcache:2.3.5'
+    api 'com.zchu:RxCache:2.3.5'
 }
