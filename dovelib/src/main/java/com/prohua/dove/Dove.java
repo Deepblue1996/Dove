@@ -366,6 +366,30 @@ public class Dove {
 
     /**
      * Encapsulation method provided by default T
+     * Before do workInit(Activity activity)
+     *
+     * @param observable Interface method
+     * @param observer   Listen method
+     * @param <T>        void
+     */
+    public static <T> void flyLifeOnlyNet(Observable<T> observable, Dover<T> observer) {
+
+        if(mInstance.activity == null) {
+            return;
+        }
+
+        observable
+                .subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                // HttpResponseFunc（）为拦截onError事件的拦截器
+                .onErrorResumeNext(new HttpResponseFunc<>())
+                .as(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from((LifecycleOwner) mInstance.activity)))
+                .subscribe(observer);
+    }
+
+    /**
+     * Encapsulation method provided by default T
      *
      * @param activity   Activity context
      * @param observable Interface method

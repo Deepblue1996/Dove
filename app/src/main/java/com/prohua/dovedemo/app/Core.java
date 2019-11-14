@@ -37,8 +37,7 @@ public class Core extends Application {
         jobTask = Dove.birth(Core.instance().getApplicationContext(),
                 Nest.build()
                         .setBaseUrl(ComDef.BASE_COM_URL)
-                        .setInterfaceClass(JobTask.class)
-                        .addGlobalParam("test", "test"));
+                        .setInterfaceClass(JobTask.class));
     }
 
 }

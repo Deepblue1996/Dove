@@ -47,4 +47,5 @@ public interface JobTask {
     @Multipart
     @POST("appuser/upload_img")
     Observable<NetBase<ImgBean>> uploadImageAvator(@Part MultipartBody.Part[] files);
+
 }
