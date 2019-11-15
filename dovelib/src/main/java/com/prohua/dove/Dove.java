@@ -321,6 +321,29 @@ public class Dove {
     }
 
     /**
+     * clearHeaders
+     */
+    public static void clearHeaders() {
+        nest.clearHeaders();
+    }
+
+    /**
+     * addGlobalHeader
+     */
+    public static void addGlobalHeader(String key, String value) {
+        nest.addHeader(key, value);
+    }
+
+    /**
+     * addGlobalHeaders
+     *
+     * @param maps HashMap
+     */
+    public static void addGlobalHeaders(HashMap<String, String> maps) {
+        nest.addHeaders(maps);
+    }
+
+    /**
      * @param observable Interface method
      * @param observer   Listen method
      * @param <T>        void
