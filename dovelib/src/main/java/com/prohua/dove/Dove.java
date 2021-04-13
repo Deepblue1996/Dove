@@ -37,6 +37,8 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
@@ -48,9 +50,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import okio.Buffer;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -77,6 +76,8 @@ public class Dove {
     private static Nest nest;
 
     private static RxCache rxCache;
+
+    private OkHttpClient okHttpClient;
 
     private Activity activity;
 
@@ -128,11 +129,13 @@ public class Dove {
                 .diskMax(20 * 1024 * 1024)
                 .build();
 
+        okHttpClient = getDoveHttpClient(context, nest);
+
         Retrofit retrofit = new Retrofit.Builder()
                 // 设置网络请求的Url地址
                 .baseUrl(nest.getBaseUrl())
                 // 设置OkHttp
-                .client(getDoveHttpClient(context, nest))
+                .client(okHttpClient)
                 // 设置Json数据解析器
                 .addConverterFactory(GsonConverterFactory.create())
                 // 支持RxJava平台
@@ -427,25 +430,31 @@ public class Dove {
      * @param observer   Listen method
      * @param <T>        void
      */
-    public static <T> void flyLifeDownload(Call<ResponseBody> observable, String path, DownloadListener downloadListener) {
+    public static void flyLifeDownload(Observable<ResponseBody> observable, String path, DownloadListener downloadListener) {
 
         if (mInstance.activity == null) {
             return;
         }
 
-        observable.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                //将Response写入到从磁盘中，详见下面分析
-                //注意，这个方法是运行在子线程中的
-                writeResponseToDisk(path, response, downloadListener);
-            }
+        observable
+                .subscribeOn(Schedulers.newThread())
+                .unsubscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                // HttpResponseFunc（）为拦截onError事件的拦截器
+                .onErrorResumeNext(new HttpResponseFunc<>())
+                .as(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from((LifecycleOwner) mInstance.activity)))
+                .subscribe(new Dover<ResponseBody>() {
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                downloadListener.onFail("网络错误");
-            }
-        });
+                    @Override
+                    public void don(Disposable d, @NonNull ResponseBody responseBody) {
+                        writeResponseToDisk(path, responseBody, downloadListener);
+                    }
+
+                    @Override
+                    public void die(Disposable d, @NonNull Throwable throwable) {
+                        downloadListener.onFail("网络错误");
+                    }
+                });
     }
 
     /**
@@ -547,9 +556,9 @@ public class Dove {
         return partList;
     }
 
-    private static void writeResponseToDisk(String path, Response<ResponseBody> response, DownloadListener downloadListener) {
+    private static void writeResponseToDisk(String path, ResponseBody response, DownloadListener downloadListener) {
         //从response获取输入流以及总大小
-        writeFileFromIS(new File(path), response.body().byteStream(), response.body().contentLength(), downloadListener);
+        writeFileFromIS(new File(path), response.byteStream(), response.contentLength(), downloadListener);
     }
 
     private static int sBufferSize = 8192;
@@ -644,7 +653,6 @@ public class Dove {
         void onStart();
 
         /**
-         *
          * @param bytesWriting 已经写的字节数
          * @param totalBytes   文件的总字节数
          */

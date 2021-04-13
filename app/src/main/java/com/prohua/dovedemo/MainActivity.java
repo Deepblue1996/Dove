@@ -48,33 +48,33 @@ public class MainActivity extends AppCompatActivity {
 //
 //                });
 
-//
-//        Dove.flyLifeDownload(
-//                Core.jobTask()
-//                        .downFile("http://192.168.0.112:8080/tcpservice_war/file/Smart-1.0.0.apk"),
-//                Environment.getExternalStorageDirectory() + "/Smart-1.0.0.apk",
-//                new Dove.DownloadListener() {
-//
-//                    @Override
-//                    public void onStart() {
-//                        Log.i("Dove", "开始下载");
-//                    }
-//
-//                    @Override
-//                    public void onProgress(int progress) {
-//                        Log.i("Dove", "下载中:" + progress);
-//                    }
-//
-//                    @Override
-//                    public void onFinish(String path) {
-//                        Log.i("Dove", "下载完成:" + path);
-//                    }
-//
-//                    @Override
-//                    public void onFail(String errorInfo) {
-//                        Log.i("Dove", "下载失败:" + errorInfo);
-//                    }
-//                });
+
+        Dove.flyLifeDownload(
+                Core.jobTask()
+                        .downFile("http://192.168.0.112:8080/tcpservice_war/file/Smart-1.0.0.apk"),
+                Environment.getExternalStorageDirectory() + "/Smart-1.0.0.apk",
+                new Dove.DownloadListener() {
+
+                    @Override
+                    public void onStart() {
+                        Log.i("Dove", "开始下载");
+                    }
+
+                    @Override
+                    public void onProgress(int progress) {
+                        Log.i("Dove", "下载中:" + progress);
+                    }
+
+                    @Override
+                    public void onFinish(String path) {
+                        Log.i("Dove", "下载完成:" + path);
+                    }
+
+                    @Override
+                    public void onFail(String errorInfo) {
+                        Log.i("Dove", "下载失败:" + errorInfo);
+                    }
+                });
 
 //        // key名称
 //        List<String> keyList = new ArrayList<>();

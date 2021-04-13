@@ -55,8 +55,7 @@ public interface JobTask {
 
     @Streaming
     @GET
-    Call<ResponseBody> downFile(@Url String url);
-
+    Observable<ResponseBody> downFile(@Url String url);
 
     /**
      * 上传
