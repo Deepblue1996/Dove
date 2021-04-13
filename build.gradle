@@ -2,8 +2,17 @@
 
 buildscript {
     repositories {
-        jcenter()
-        google()
+        maven {
+            url "https://maven.aliyun.com/repository/google"
+        }
+        maven {
+            url "https://maven.aliyun.com/repository/public"
+        }
+        maven {
+            url "https://maven.aliyun.com/repository/central"
+        }
+        maven { url 'https://jitpack.io' } // add repository
+        maven { url "https://wosk.top/" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.2'
@@ -16,10 +25,17 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
-        google()
-        maven { url 'https://jitpack.io' }
-        maven { url 'http://zdhua.xyz' }
+        maven {
+            url "https://maven.aliyun.com/repository/google"
+        }
+        maven {
+            url "https://maven.aliyun.com/repository/public"
+        }
+        maven {
+            url "https://maven.aliyun.com/repository/central"
+        }
+        maven { url 'https://jitpack.io' } // add repository
+        maven { url "https://wosk.top/" }
 //        maven { url 'https://dl.bintray.com/zchu/maven/' }
     }
 }

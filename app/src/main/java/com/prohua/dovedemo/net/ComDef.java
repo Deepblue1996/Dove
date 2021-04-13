@@ -6,5 +6,6 @@ package com.prohua.dovedemo.net;
  */
 
 public class ComDef {
-    public final static String BASE_COM_URL = "https://www.axt18.com/";
+    //public final static String BASE_COM_URL = "https://www.axt18.com/";
+    public final static String BASE_COM_URL = "http://192.168.0.112:8080/";
 }

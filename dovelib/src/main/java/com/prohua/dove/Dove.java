@@ -2,7 +2,6 @@ package com.prohua.dove;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 
 import androidx.lifecycle.LifecycleOwner;
 
@@ -22,8 +21,12 @@ import com.zchu.rxcache.data.CacheResult;
 import com.zchu.rxcache.diskconverter.GsonDiskConverter;
 import com.zchu.rxcache.stategy.CacheStrategy;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -43,7 +46,11 @@ import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import okio.Buffer;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -52,7 +59,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * 鸽子 Dove
  * Created by Deep on 2018/3/14 0014.
  */
-
+@SuppressWarnings("all")
 public class Dove {
 
     private final static String NET_POST = "POST";
@@ -138,6 +145,7 @@ public class Dove {
 
     /**
      * 简化作用，全局（适用于单Activity）
+     *
      * @param activity 活动
      */
     public static void workInit(Activity activity) {
@@ -368,7 +376,7 @@ public class Dove {
      */
     public static <T> void flyLife(Observable<T> observable, Dover<T> observer) {
 
-        if(mInstance.activity == null) {
+        if (mInstance.activity == null) {
             return;
         }
 
@@ -397,7 +405,7 @@ public class Dove {
      */
     public static <T> void flyLifeOnlyNet(Observable<T> observable, Dover<T> observer) {
 
-        if(mInstance.activity == null) {
+        if (mInstance.activity == null) {
             return;
         }
 
@@ -409,6 +417,35 @@ public class Dove {
                 .onErrorResumeNext(new HttpResponseFunc<>())
                 .as(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from((LifecycleOwner) mInstance.activity)))
                 .subscribe(observer);
+    }
+
+    /**
+     * Encapsulation method provided by default T
+     * Before do workInit(Activity activity)
+     *
+     * @param observable Interface method
+     * @param observer   Listen method
+     * @param <T>        void
+     */
+    public static <T> void flyLifeDownload(Call<ResponseBody> observable, String path, DownloadListener downloadListener) {
+
+        if (mInstance.activity == null) {
+            return;
+        }
+
+        observable.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                //将Response写入到从磁盘中，详见下面分析
+                //注意，这个方法是运行在子线程中的
+                writeResponseToDisk(path, response, downloadListener);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                downloadListener.onFail("网络错误");
+            }
+        });
     }
 
     /**
@@ -510,4 +547,121 @@ public class Dove {
         return partList;
     }
 
+    private static void writeResponseToDisk(String path, Response<ResponseBody> response, DownloadListener downloadListener) {
+        //从response获取输入流以及总大小
+        writeFileFromIS(new File(path), response.body().byteStream(), response.body().contentLength(), downloadListener);
+    }
+
+    private static int sBufferSize = 8192;
+
+    //将输入流写入文件
+    private static void writeFileFromIS(File file, InputStream is, long totalLength, DownloadListener downloadListener) {
+
+        //开始下载
+        downloadListener.onStart();
+
+        //创建文件
+        if (!file.exists()) {
+            if (!Objects.requireNonNull(file.getParentFile()).exists())
+                file.getParentFile().mkdir();
+            try {
+                file.createNewFile();
+                Logger.d("保存文件创建成功");
+            } catch (IOException e) {
+                e.printStackTrace();
+                downloadListener.onFail("createNewFile IOException");
+                Logger.d("保存文件创建失败");
+            }
+        }
+
+        OutputStream os = null;
+        long currentLength = 0;
+        try {
+            os = new BufferedOutputStream(new FileOutputStream(file));
+            byte data[] = new byte[sBufferSize];
+            int len;
+            while ((len = is.read(data, 0, sBufferSize)) != -1) {
+                os.write(data, 0, len);
+                currentLength += len;
+                //计算当前下载进度
+                downloadListener.onProgress((int) (100 * currentLength / totalLength));
+            }
+            //下载完成，并返回保存的文件路径
+            downloadListener.onFinish(file.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+            downloadListener.onFail("IOException");
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (os != null) {
+                    os.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public interface DownloadListener {
+
+        /**
+         * 下载开始
+         */
+        void onStart();
+
+        /**
+         * 下载进度
+         *
+         * @param progress
+         */
+        void onProgress(int progress);
+
+        /**
+         * 下载完成
+         *
+         * @param path
+         */
+        void onFinish(String path);
+
+        /**
+         * 下载失败
+         *
+         * @param errorInfo
+         */
+        void onFail(String errorInfo);
+    }
+
+    public interface ProgressUploadListener {
+
+        /**
+         * 上传开始
+         */
+        void onStart();
+
+        /**
+         *
+         * @param bytesWriting 已经写的字节数
+         * @param totalBytes   文件的总字节数
+         */
+        void onProgress(long bytesWriting, long totalBytes);
+
+        /**
+         * 上传完成
+         *
+         * @param path
+         */
+        void onFinish();
+
+        /**
+         * 上传失败
+         *
+         * @param errorInfo
+         */
+        void onFail();
+    }
 }
