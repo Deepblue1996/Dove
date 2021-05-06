@@ -99,6 +99,7 @@ public class Dove {
 
     /**
      * 释放内存
+     *
      * @param <T>
      */
     public static <T> void destory() {
