@@ -7,8 +7,8 @@ android {
         applicationId "com.prohua.dovedemo"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 39
-        versionName "1.4.1"
+        versionCode 53
+        versionName "1.5.3"
     }
     buildTypes {
         release {
