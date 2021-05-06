@@ -87,12 +87,7 @@ public class Dove {
     @SuppressWarnings("unchecked") // Single-interface proxy creation guarded by parameter safety.
     public static <T> T birth(Context context, Nest nest) {
         if (null == mInstance) {
-            synchronized (Dove.class) {
-                if (null == mInstance) {
-                    mInstance = new Dove(context, nest);
-
-                }
-            }
+            mInstance = new Dove(context, nest);
         }
         return (T) doveMission;
     }
@@ -102,9 +97,7 @@ public class Dove {
      *
      * @param <T>
      */
-    public static <T> void destory() {
-        mInstance.okHttpClient.dispatcher().executorService().shutdown();   //清除并关闭线程池
-        mInstance.okHttpClient.connectionPool().evictAll();                 //清除并关闭连接池
+    public static void destory() {
         mInstance.okHttpClient = null;
         mInstance = null;
     }
@@ -123,6 +116,8 @@ public class Dove {
                 .methodOffset(7)        // (Optional) Hides internal method calls up to offset. Default 5
                 .tag("Dove")            // (Optional) Global tag for every log. Default PRETTY_LOGGER
                 .build();
+
+        Logger.clearLogAdapters();
 
         Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
 
