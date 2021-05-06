@@ -97,6 +97,10 @@ public class Dove {
         return (T) doveMission;
     }
 
+    /**
+     * 释放内存
+     * @param <T>
+     */
     public static <T> void destory() {
         mInstance.okHttpClient.dispatcher().executorService().shutdown();   //清除并关闭线程池
         mInstance.okHttpClient.connectionPool().evictAll();                 //清除并关闭连接池
