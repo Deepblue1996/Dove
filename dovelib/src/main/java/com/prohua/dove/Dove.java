@@ -98,8 +98,12 @@ public class Dove {
      * @param <T>
      */
     public static void destory() {
-        mInstance.okHttpClient = null;
-        mInstance = null;
+        if(mInstance != null) {
+            if(mInstance.okHttpClient != null) {
+                mInstance.okHttpClient = null;
+            }
+            mInstance = null;
+        }
     }
 
     /**
