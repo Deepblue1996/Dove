@@ -21,12 +21,13 @@ import com.zchu.rxcache.data.CacheResult;
 import com.zchu.rxcache.diskconverter.GsonDiskConverter;
 import com.zchu.rxcache.stategy.CacheStrategy;
 
-import java.io.BufferedOutputStream;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -37,8 +38,6 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
@@ -48,8 +47,15 @@ import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okio.Buffer;
+import okio.BufferedSource;
+import okio.ForwardingSource;
+import okio.Okio;
+import okio.Source;
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -98,8 +104,8 @@ public class Dove {
      * @param <T>
      */
     public static void destory() {
-        if(mInstance != null) {
-            if(mInstance.okHttpClient != null) {
+        if (mInstance != null) {
+            if (mInstance.okHttpClient != null) {
                 mInstance.okHttpClient = null;
             }
             mInstance = null;
@@ -169,6 +175,87 @@ public class Dove {
         mInstance.activity = activity;
     }
 
+    public abstract static class RetrofitCallback<T> implements Callback<T> {
+
+        @Override
+        public void onResponse(Call<T> call, retrofit2.Response<T> response) {
+            if (response.isSuccessful()) {
+                onSuccess(call, response);
+            } else {
+                onFailure(call, new Throwable(response.message()));
+            }
+        }
+
+        public abstract void onSuccess(Call<T> call, retrofit2.Response<T> response);
+
+        public void onLoading(long total, long progress) {
+        }
+    }
+
+    private static RetrofitCallback<ResponseBody> callback = null;
+
+    /**
+     * 扩展OkHttp的请求体，实现上传时的进度提示
+     *
+     * @param <T>
+     */
+    public final class FileResponseBody<T> extends ResponseBody {
+        /**
+         * 实际请求体
+         */
+        private ResponseBody mResponseBody;
+
+        /**
+         * BufferedSource
+         */
+        private BufferedSource mBufferedSource;
+
+        public FileResponseBody(ResponseBody responseBody) {
+            super();
+            this.mResponseBody = responseBody;
+        }
+
+        @Override
+        public BufferedSource source() {
+            if (mBufferedSource == null) {
+                mBufferedSource = Okio.buffer(source(mResponseBody.source()));
+            }
+            return mBufferedSource;
+        }
+
+        @Override
+        public long contentLength() {
+            return mResponseBody.contentLength();
+        }
+
+        @Override
+        public MediaType contentType() {
+            return mResponseBody.contentType();
+        }
+
+        /**
+         * 回调进度接口
+         *
+         * @param source
+         * @return Source
+         */
+        private Source source(Source source) {
+            return new ForwardingSource(source) {
+                long totalBytesRead = 0L;
+
+                @Override
+                public long read(Buffer sink, long byteCount) throws IOException {
+                    long bytesRead = super.read(sink, byteCount);
+                    totalBytesRead += bytesRead != -1 ? bytesRead : 0;
+                    if (callback != null) {
+                        callback.onLoading(mResponseBody.contentLength(), totalBytesRead);
+                    }
+                    return bytesRead;
+                }
+            };
+        }
+    }
+
     /**
      * OkHttpClient
      *
@@ -183,6 +270,14 @@ public class Dove {
                 .addNetworkInterceptor(new DoveNetworkInterceptor(nest.getConnectTime()))
                 .addInterceptor(new DoveNotNetworkInterceptor(context, nest.getDisconnectTime()))
                 .addInterceptor(getLoggingInterceptor())
+                .addInterceptor(new Interceptor() {
+                    @NotNull
+                    @Override
+                    public Response intercept(@NotNull Chain chain) throws IOException {
+                        Response response = chain.proceed(chain.request());
+                        return response.newBuilder().body(new FileResponseBody<ResponseBody>(response.body())).build();
+                    }
+                })
                 .build();
     }
 
@@ -441,31 +536,48 @@ public class Dove {
      * @param observer   Listen method
      * @param <T>        void
      */
-    public static void flyLifeDownload(Observable<ResponseBody> observable, String path, DownloadListener downloadListener) {
+    public static void flyLifeDownload(Call<ResponseBody> call, String path, DownloadListener downloadListener) {
 
         if (mInstance.activity == null) {
             return;
         }
 
-        observable
-                .subscribeOn(Schedulers.newThread())
-                .unsubscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                // HttpResponseFunc（）为拦截onError事件的拦截器
-                .onErrorResumeNext(new HttpResponseFunc<>())
-                .as(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from((LifecycleOwner) mInstance.activity)))
-                .subscribe(new Dover<ResponseBody>() {
+        callback = new RetrofitCallback<ResponseBody>() {
 
-                    @Override
-                    public void don(Disposable d, @NonNull ResponseBody responseBody) {
-                        writeResponseToDisk(path, responseBody, downloadListener);
-                    }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                downloadListener.onFail(t.getMessage());
+            }
 
-                    @Override
-                    public void die(Disposable d, @NonNull Throwable throwable) {
-                        downloadListener.onFail("网络错误");
+            @Override
+            public void onSuccess(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                try {
+                    InputStream is = response.body().byteStream();
+                    File file = new File(path, "download.jpg");
+                    FileOutputStream fos = new FileOutputStream(file);
+                    BufferedInputStream bis = new BufferedInputStream(is);
+                    byte[] buffer = new byte[1024];
+                    int len;
+                    while ((len = bis.read(buffer)) != -1) {
+                        fos.write(buffer, 0, len);
                     }
-                });
+                    fos.flush();
+                    fos.close();
+                    bis.close();
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                downloadListener.onFinish(path);
+            }
+
+            @Override
+            public void onLoading(long total, long progress) {
+                downloadListener.onProgress((int) ((float) (((float) progress / ((float) total) * 100))));
+            }
+        };
+
+        call.enqueue(callback);
     }
 
     /**
@@ -565,66 +677,6 @@ public class Dove {
         }
 
         return partList;
-    }
-
-    private static void writeResponseToDisk(String path, ResponseBody response, DownloadListener downloadListener) {
-        //从response获取输入流以及总大小
-        writeFileFromIS(new File(path), response.byteStream(), response.contentLength(), downloadListener);
-    }
-
-    private static int sBufferSize = 8192;
-
-    //将输入流写入文件
-    private static void writeFileFromIS(File file, InputStream is, long totalLength, DownloadListener downloadListener) {
-
-        //开始下载
-        downloadListener.onStart();
-
-        //创建文件
-        if (!file.exists()) {
-            if (!Objects.requireNonNull(file.getParentFile()).exists())
-                file.getParentFile().mkdir();
-            try {
-                file.createNewFile();
-                Logger.d("保存文件创建成功");
-            } catch (IOException e) {
-                e.printStackTrace();
-                downloadListener.onFail("createNewFile IOException");
-                Logger.d("保存文件创建失败");
-            }
-        }
-
-        OutputStream os = null;
-        long currentLength = 0;
-        try {
-            os = new BufferedOutputStream(new FileOutputStream(file));
-            byte data[] = new byte[sBufferSize];
-            int len;
-            while ((len = is.read(data, 0, sBufferSize)) != -1) {
-                os.write(data, 0, len);
-                currentLength += len;
-                //计算当前下载进度
-                downloadListener.onProgress((int) (100 * currentLength / totalLength));
-            }
-            //下载完成，并返回保存的文件路径
-            downloadListener.onFinish(file.getAbsolutePath());
-        } catch (IOException e) {
-            e.printStackTrace();
-            downloadListener.onFail("IOException");
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                if (os != null) {
-                    os.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     public interface DownloadListener {

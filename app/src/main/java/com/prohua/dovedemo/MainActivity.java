@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         Dove.flyLifeDownload(
                 Core.jobTask()
-                        .downFile("http://192.168.0.112:8080/tcpservice_war/file/Smart-1.0.0.apk"),
+                        .downFile("http://192.168.0.112:8080/tcpservice_war/file/smarthome1.0.9.apk"),
                 Environment.getExternalStorageDirectory() + "/Smart-1.0.0.apk",
                 new Dove.DownloadListener() {
 
