@@ -553,7 +553,7 @@ public class Dove {
             public void onSuccess(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
                 try {
                     InputStream is = response.body().byteStream();
-                    File file = new File(path, "download.jpg");
+                    File file = new File(path);
                     FileOutputStream fos = new FileOutputStream(file);
                     BufferedInputStream bis = new BufferedInputStream(is);
                     byte[] buffer = new byte[1024];
